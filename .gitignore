@@ -1,0 +1,3 @@
+conda
+*.pyc
+*__pycache__*

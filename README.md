@@ -30,6 +30,26 @@ make import-lims-db SAMPLESHEETS=/path/to/samplesheets-dir/
 ```
 - see description in `import-samplesheets.py` file for details on directory and file formats
 
+## Example
+
+You can demo the app with the included example data:
+
+```
+make conda-install
+
+LIMS_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/lims.sqlite")"
+DJANGO_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/db.sqlite")"
+make init SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
+
+make import-lims-db SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"  SAMPLESHEETS=example-samplesheets/
+
+make runserver SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
+
+# navigate to http://127.0.0.1:8000/admin in web browser
+```
+
 # Software
 
 - Linux or macOS
+
+- Python 3.6+, Django 2.1.2 (included with `conda`)

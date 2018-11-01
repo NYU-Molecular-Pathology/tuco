@@ -1,0 +1,35 @@
+[Header],,,,,,,,,,
+IEMFileVersion,4,,,,,,,,,
+Investigator Name,,,,,,,,,,
+Project Name,NGS-ST-FP-14,,,,,,,,,
+Experiment Name,NGS-ST-FP-14,,,,,,,,,
+Date,10/9/2018,,,,,,,,,
+Workflow,GenerateFASTQ,,,,,,,,,
+Application,FASTQ Only,,,,,,,,,
+Assay,Nextera,,,,,,,,,
+Description,Description,,,,,,,,,
+Chemistry,Amplicon,,,,,,,,,
+[Reads],,,,,,,,,,
+151,,,,,,,,,,
+151,,,,,,,,,,
+[Settings],,,,,,,,,,
+Adapter,CTGTCTCTTATACACATCT,,,,,,,,,
+,,,,,,,,,,
+[Data],,,,,,,,,,
+Sample_ID,Sample_Name,Sample_Plate,Sample_Well,I7_Index_ID,index,I5_Index_ID,index2,Sample_Project,Description,GenomeFolder
+NC-IVS35,NC-IVS35,Plate,Well,P7_1,TAAGGCGA,Illumina_A_17,AGTTACGC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SERACARE-1-125ng,SERACARE-1-125ng,Plate,Well,P7_2,CGTACTAG,Illumina_A_18,TGGATCAC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample22,Sample22,Plate,Well,P7_3,AGGCAGAA,Illumina_A_19,AACTGCAC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample23,Sample23,Plate,Well,P7_4,TCCTGAGC,Illumina_A_20,TTACGGTC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample24,Sample24,Plate,Well,P7_5,GGACTCCT,Illumina_A_21,GACGATCA,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample25,Sample25,Plate,Well,P7_6,TAGGCATG,Illumina_A_22,CCTTGAAC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample26,Sample26,Plate,Well,P7_7,CTCTCTAC,Illumina_A_23,ACGAATGG,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample27,Sample27,Plate,Well,P7_8,CAGAGAGG,Illumina_A_24,GGCATACT,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample28,Sample28,Plate,Well,P7_1,TAAGGCGA,Illumina_A_25,AGGTCTCT,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample29,Sample29,Plate,Well,P7_2,CGTACTAG,Illumina_A_26,CATGCACA,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample30,Sample30,Plate,Well,P7_3,AGGCAGAA,Illumina_A_27,CCGCTTAT,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample31,Sample31,Plate,Well,P7_4,TCCTGAGC,Illumina_A_28,GTGGAATG,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample32,Sample32,Plate,Well,P7_5,GGACTCCT,Illumina_A_29,GACATGGA,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample33,Sample33,Plate,Well,P7_6,TAGGCATG,Illumina_A_30,GTCACATG,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+Sample34,Sample34,Plate,Well,P7_7,CTCTCTAC,Illumina_A_31,GATCTCCT,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+NTC-H2O,NTC-H2O,Plate,Well,P7_8,CAGAGAGG,Illumina_A_32,CAACTGAC,ArcherDx_Run,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA

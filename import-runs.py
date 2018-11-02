@@ -51,7 +51,7 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
         # import to db
         SequencingRun.objects.get_or_create(
             Run_ID = Run_ID,
-            Run_path = Run_path,
+            Run_external_path = Run_path,
             # Sheet_path =
             Seq_Type = Seq_Type,
             Sequencer_Serial = Sequencer_Serial,
@@ -62,7 +62,7 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
     else:
         SequencingRun.objects.get_or_create(
             Run_ID = Run_ID,
-            Run_path = Run_path,
+            Run_external_path = Run_path,
             # Sheet_path =
             Seq_Type = Seq_Type,
             Sequencer_Serial = Sequencer_Serial,

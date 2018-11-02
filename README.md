@@ -26,7 +26,7 @@ make init
 Import data from a directory containing sequencing samplesheets:
 
 ```
-make import-lims-db SAMPLESHEETS=/path/to/samplesheets-dir/
+make import-lims-db SAMPLESHEETS_DIR=/path/to/samplesheets-dir/ RUNS_DIR=/path/to/samplesheets-dir/
 ```
 - see description in `import-samplesheets.py` file for details on directory and file formats
 
@@ -41,7 +41,7 @@ LIMS_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/lims.sql
 DJANGO_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/db.sqlite")"
 make init SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
 
-make import-lims-db SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"  SAMPLESHEETS=example-samplesheets/
+make import-lims-db SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"  SAMPLESHEETS_DIR=example-samplesheets/ RUNS_DIR=example-samplesheets/
 
 make runserver SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
 

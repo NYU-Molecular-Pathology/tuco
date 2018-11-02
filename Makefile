@@ -43,11 +43,25 @@ init:
 
 # ~~~~~ RUN ~~~~~ #
 # shortcut commands for running and managing the app
+
+# secret key for web app
 export SECRET_KEY:=$(shell cat ../secret-key.txt)
+
+# db for LIMS data storage
 export LIMS_DB:=$(shell python -c 'import os; print(os.path.realpath("../lims.sqlite3"));')
+
+# db for app settings and user accounts
 export DJANGO_DB:=$(shell python -c 'import os; print(os.path.realpath("../db.sqlite3"));')
-export DJANGO_ENABLE_DEBUG:=1
+
+# dir for user uploads
 export MEDIA_ROOT=$(shell python -c 'import os; print(os.path.realpath("../tuco-uploads"));')
+
+# dir containing sequencing samplesheets
+export SAMPLESHEETS_DIR:=$(shell python -c 'import os; print(os.path.realpath("../samplesheets"));')
+
+export RUNS_DIR:=$(shell python -c 'import os; print(os.path.realpath("../samplesheets"));')
+
+export DJANGO_ENABLE_DEBUG:=1
 CMD:=
 
 # run Django 'manage'
@@ -85,13 +99,11 @@ py:
 
 # ~~~~~ IMPORT/EXPORT DATA ~~~~~ #
 # add, remove, delete entries from the database
-# dir containing sequencing samplesheets
-SAMPLESHEETS:=../samplesheets
 
 # import all LIMS data from samplesheets into db's
 import-lims-db:
-	$(MAKE) py CMD='import-runs.py $(SAMPLESHEETS)'
-	$(MAKE) py CMD='import-samplesheets.py $(SAMPLESHEETS)'
+	$(MAKE) py CMD='import-runs.py $(SAMPLESHEETS_DIR)'
+	$(MAKE) py CMD='import-samplesheets.py $(SAMPLESHEETS_DIR)'
 
 # remove all entries from data db's
 clear-db-runs:

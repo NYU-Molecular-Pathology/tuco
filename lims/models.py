@@ -1,5 +1,9 @@
 from django.db import models
 import hashlib
+import os
+
+SAMPLESHEETS_DIR = os.path.realpath(os.environ['SAMPLESHEETS_DIR'])
+RUNS_DIR = os.path.realpath(os.environ['RUNS_DIR'])
 
 class SequencingSample(models.Model):
     """
@@ -26,7 +30,7 @@ class SequencingSample(models.Model):
     Chemistry = models.TextField(blank=True)
     AdapterSequenceRead1 = models.TextField(blank=True)
     AdapterSequenceRead2 = models.TextField(blank=True)
-    Sheet_path = models.TextField(blank=True)
+    Sheet_external_path = models.TextField(blank=True)
     Sheet_md5 = models.TextField(blank=True)
     Sheet_host = models.TextField(blank=True)
     hash = models.TextField(blank = True, unique = True)
@@ -66,21 +70,21 @@ class SequencingSampleSheet(models.Model):
     """
     Run_ID = models.TextField(blank = True)
     # app 'uploads' directory path location
-    Sheet_path = models.FileField(blank = True, upload_to = samplesheet_upload_path)
+    # Sheet_path = models.FileField(blank = True, upload_to = samplesheet_upload_path)
     # path to file imported external to app
-    Sheet_external_path = models.TextField(blank = True)
+    Sheet_external_path = models.FilePathField(path = SAMPLESHEETS_DIR, blank = True, recursive = True, match = 'SampleSheet.csv')
     Sheet_md5 = models.TextField(blank=True, unique = True)
     Sheet_host = models.TextField(blank=True)
     hash = models.TextField(blank = True)
 
     def save(self, *args, **kwargs):
         # if an external path was given and no 'upload' path is registered yet
-        if self.Sheet_external_path and not self.Sheet_path:
-            
+        # if self.Sheet_external_path and not self.Sheet_path:
+
         # update the 'hash' field with the entry attributes
         d = {
         'Run_ID' : self.Run_ID.Run_ID, # get the string here !!
-        'Sheet_path': self.Sheet_path,
+        'Sheet_external_path': self.Sheet_external_path,
         'Sheet_md5' : self.Sheet_md5,
         'Sheet_host' : self.Sheet_host
         }
@@ -102,7 +106,7 @@ class SequencingRun(models.Model):
     Database model for a sequencing run, as output by the sequencer
     """
     Run_ID = models.TextField(unique = True)
-    Run_path = models.TextField(blank=True)
+    Run_external_path = models.FilePathField(blank=True, path = RUNS_DIR, recursive = False, allow_files = False, allow_folders = True)
     Sheet_path = models.TextField(blank=True)
     Sheet_md5 = models.TextField(blank=True)
     Sheet_host = models.TextField(blank=True)

@@ -1,0 +1,6 @@
+{% if samplesheet %}
+<h1>{{ samplesheet|stringformat:"s" }}</h1>
+{% else %}
+    <p>No samplesheet provided.</p>
+{% endif %}
+<a href="{% url 'lims:samplesheets' %}">[ All Samplesheets ]</a><a href="{% url 'lims:index' %}">[ LIMS Index ]</a>

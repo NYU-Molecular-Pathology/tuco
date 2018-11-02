@@ -94,11 +94,11 @@ import-lims-db:
 
 # remove all entries from data db's
 clear-db-runs:
-	echo 'from blog.models import SequencingRun; SequencingRun.objects.all().delete();' | python manage.py shell
+	echo 'from lims.models import SequencingRun; SequencingRun.objects.all().delete();' | python manage.py shell
 clear-db-samples:
-	echo 'from blog.models import SequencingSample; SequencingSample.objects.all().delete();' | python manage.py shell
+	echo 'from lims.models import SequencingSample; SequencingSample.objects.all().delete();' | python manage.py shell
 clear-db-samplesheets:
-	echo 'from blog.models import SequencingSampleSheet; SequencingSampleSheet.objects.all().delete();' | python manage.py shell
+	echo 'from lims.models import SequencingSampleSheet; SequencingSampleSheet.objects.all().delete();' | python manage.py shell
 
 clear-db: clear-db-runs clear-db-samplesheets clear-db-samples
 
@@ -108,10 +108,10 @@ reset-lims-db: clear-db
 
 # print db contents
 all-runs:
-	echo 'from blog.models import SequencingRun; print(SequencingRun.objects.all());' | python manage.py shell
+	echo 'from lims.models import SequencingRun; print(SequencingRun.objects.all());' | python manage.py shell
 
 all-samples:
-	echo 'from blog.models import DemuxSample; print(DemuxSample.objects.all());' | python manage.py shell
+	echo 'from lims.models import DemuxSample; print(DemuxSample.objects.all());' | python manage.py shell
 
 all-samplesheets:
-	echo 'from blog.models import SequencingSampleSheet; print(SequencingSampleSheet.objects.all());' | python manage.py shell
+	echo 'from lims.models import SequencingSampleSheet; print(SequencingSampleSheet.objects.all());' | python manage.py shell

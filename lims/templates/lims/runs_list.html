@@ -1,0 +1,10 @@
+{% if runs %}
+    <ul>
+    {% for run in runs %}
+        <li><a href="{% url 'lims:run' run.id %}">{{ run.Run_ID }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No runs are available.</p>
+{% endif %}
+<a href="{% url 'lims:index' %}">[ Back to LIMS index ]</a>

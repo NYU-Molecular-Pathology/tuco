@@ -1,0 +1,6 @@
+{% if sample %}
+<h1>{{ sample.Sample_ID }}</h1>
+{% else %}
+    <p>No sample provided.</p>
+{% endif %}
+<a href="{% url 'lims:samples' %}">[ All Samples ]</a><a href="{% url 'lims:index' %}">[ LIMS Index ]</a>

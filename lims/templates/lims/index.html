@@ -1,0 +1,33 @@
+<h1>LIMS index</h1>
+<h2>Latest Runs</h2>
+{% if latest_runs %}
+    <ul>
+    {% for run in latest_runs %}
+        <li><a href="{% url 'lims:run' run.id %}">{{ run.Run_ID }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No runs are available.</p>
+{% endif %}
+
+<h2>Latest Samplesheets</h2>
+{% if latest_samplesheets %}
+    <ul>
+    {% for samplesheet in latest_samplesheets %}
+        <li><a href="{% url 'lims:samplesheet' samplesheet.id %}">{{ samplesheet|stringformat:'s' }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No samplesheets are available.</p>
+{% endif %}
+
+<h2>Latest Samples</h2>
+{% if latest_samples %}
+    <ul>
+    {% for sample in latest_samples %}
+        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample.Sample_ID }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No samples are available.</p>
+{% endif %}

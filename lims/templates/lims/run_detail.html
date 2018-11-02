@@ -1,0 +1,6 @@
+{% if run %}
+<h1>{{ run.Run_ID }}</h1>
+{% else %}
+    <p>No run provided.</p>
+{% endif %}
+<a href="{% url 'lims:runs' %}">[ All Runs ]</a><a href="{% url 'lims:index' %}">[ LIMS Index ]</a>

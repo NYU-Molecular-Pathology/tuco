@@ -1,3 +1,7 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Samplesheet List</h2>
 {% if samplesheets %}
     <ul>
     {% for samplesheet in samplesheets %}
@@ -7,4 +11,5 @@
 {% else %}
     <p>No samplesheets are available.</p>
 {% endif %}
-<a href="{% url 'lims:index' %}">[ Back to LIMS index ]</a>
+
+{% endblock content %}

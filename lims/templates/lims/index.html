@@ -1,4 +1,7 @@
-<h1>LIMS index</h1>
+{% extends "./base.html" %}
+
+{% block content %}
+
 <h2>Latest Runs</h2>
 {% if latest_runs %}
     <ul>
@@ -31,3 +34,5 @@
 {% else %}
     <p>No samples are available.</p>
 {% endif %}
+
+{% endblock content %}

@@ -1,6 +1,12 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Sample Details</h2>
+
 {% if sample %}
-<h1>{{ sample.Sample_ID }}</h1>
+<h3>{{ sample.Sample_ID }}</h3>
 {% else %}
     <p>No sample provided.</p>
 {% endif %}
-<a href="{% url 'lims:samples' %}">[ All Samples ]</a><a href="{% url 'lims:index' %}">[ LIMS Index ]</a>
+
+{% endblock content %}

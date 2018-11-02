@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <title>{% block title %}LIMS{% endblock title %}</title>
+</head>
+
+<body>
+    <div>
+        <h1>LIMS</h1>
+        <div><a href="{% url 'lims:index' %}">[ Index ]</a></div>
+        <div><a href="{% url 'lims:runs' %}">[ All Runs ]</a></div>
+        <div><a href="{% url 'lims:samplesheets' %}">[ All Samplesheets ]</a></div>
+        <div><a href="{% url 'lims:samples' %}">[ All Samples ]</a></div>
+    <hr>
+
+    <div id="content">
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+</html>

@@ -1,6 +1,12 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Samplesheet Details</h2>
+
 {% if samplesheet %}
-<h1>{{ samplesheet|stringformat:"s" }}</h1>
+<h3>{{ samplesheet|stringformat:"s" }}</h3>
 {% else %}
     <p>No samplesheet provided.</p>
 {% endif %}
-<a href="{% url 'lims:samplesheets' %}">[ All Samplesheets ]</a><a href="{% url 'lims:index' %}">[ LIMS Index ]</a>
+
+{% endblock content %}

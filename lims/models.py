@@ -52,17 +52,31 @@ class SequencingSample(models.Model):
     def __str__(self):
         return self.Sample_ID
 
+
+def samplesheet_upload_path(instance, filename):
+    """
+    file will be uploaded to MEDIA_ROOT/...
+    """
+    subpath = 'lims/samplesheets/%Y-%m-%d/{0}/{1}'.format(instance.Run_ID, filename)
+    return(subpath)
+
 class SequencingSampleSheet(models.Model):
     """
     Database model for an IEM formatted SampleSheet.csv file, used for demultiplexing with bcl2fastq
     """
     Run_ID = models.TextField(blank = True)
-    Sheet_path = models.TextField(blank = True)
+    # app 'uploads' directory path location
+    Sheet_path = models.FileField(blank = True, upload_to = samplesheet_upload_path)
+    # path to file imported external to app
+    Sheet_external_path = models.TextField(blank = True)
     Sheet_md5 = models.TextField(blank=True, unique = True)
     Sheet_host = models.TextField(blank=True)
     hash = models.TextField(blank = True)
 
     def save(self, *args, **kwargs):
+        # if an external path was given and no 'upload' path is registered yet
+        if self.Sheet_external_path and not self.Sheet_path:
+            
         # update the 'hash' field with the entry attributes
         d = {
         'Run_ID' : self.Run_ID.Run_ID, # get the string here !!

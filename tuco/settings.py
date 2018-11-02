@@ -87,7 +87,7 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = ['lims.routers.Router'] 
+DATABASE_ROUTERS = ['lims.routers.Router']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -126,3 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# User uploaded files; absolute path
+MEDIA_ROOT = os.environ['MEDIA_ROOT']

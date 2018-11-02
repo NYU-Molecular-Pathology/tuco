@@ -75,7 +75,7 @@ for sheet_file in find.find(search_dir = sheets_dir, inclusion_patterns = ['Samp
         # register the SampleSheet in the database if its not there already
         SequencingSampleSheet.objects.get_or_create(
         Run_ID =  SequencingRun.objects.get(Run_ID = Run_ID),
-        Sheet_path = record.get('Sheet_path',''),
+        Sheet_external_path = record.get('Sheet_path',''),
         Sheet_md5 = record.get('Sheet_md5',''),
         Sheet_host = record.get('Sheet_host','')
         )

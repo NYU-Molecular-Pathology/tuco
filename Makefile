@@ -47,6 +47,7 @@ export SECRET_KEY:=$(shell cat ../secret-key.txt)
 export LIMS_DB:=$(shell python -c 'import os; print(os.path.realpath("../lims.sqlite3"));')
 export DJANGO_DB:=$(shell python -c 'import os; print(os.path.realpath("../db.sqlite3"));')
 export DJANGO_ENABLE_DEBUG:=1
+export MEDIA_ROOT=$(shell python -c 'import os; print(os.path.realpath("../tuco-uploads"));')
 CMD:=
 
 # run Django 'manage'

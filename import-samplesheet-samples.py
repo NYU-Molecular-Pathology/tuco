@@ -44,36 +44,38 @@ $ python import-samplesheets.py samplesheets/
 import os
 import sys
 import csv
+import getpass
 from util import samplesheet
 from util import find
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")
 import django
 django.setup()
-from lims.models import SequencingRun, SequencingSampleSheet
+from lims.models import SequencingSample, SequencingRun, SequencingSampleSheet
+
 
 sheets_dir = os.path.realpath(sys.argv[1])
 
 #  find all the samplesheets in the dir
 for sheet_file in find.find(search_dir = sheets_dir, inclusion_patterns = ['SampleSheet.csv']):
-    sheet = samplesheet.IEMFile(path = sheet_file)
+    sheet = samplesheet.IEMFile(path = os.path.realpath(sheet_file))
     Run_ID = os.path.basename(os.path.dirname(sheet_file))
     seqtype_file = os.path.join(os.path.dirname(sheet_file), 'seqtype.txt')
+    pairs = False
 
-    # register the SampleSheet in the database if its not there already
-    SequencingSampleSheet.objects.get_or_create(
-    run_id =  SequencingRun.objects.get(run_id = Run_ID),
-    path = os.path.realpath(sheet.path),
-    md5 = sheet.md5,
-    host = sheet.meta.get('Sheet_host', '')
-    )
-    # IEMFileVersion = record.get('IEMFileVersion',''),
-    # Investigator_Name = record.get('Investigator_Name',''), # Investigator Name
-    # Project_Name = record.get('Project_Name',''), # Project Name
-    # Experiment_Name = record.get('Experiment_Name',''), # Experiment Name
-    # Date = record.get('Date',''),
-    # Workflow = record.get('Workflow',''),
-    # Application = record.get('Application',''),
-    # Assay = record.get('Assay',''),
-    # Chemistry = record.get('Chemistry',''),
-    # AdapterSequenceRead1 = record.get('AdapterSequenceRead1',''),
-    # AdapterSequenceRead2 = record.get('AdapterSequenceRead2',''),
+    # update each record and add to database
+    for record in sheet.flatten():
+        Sample_Name = record.get('Sample_Name')
+
+        # add to db # get_or_create
+        SequencingSample.objects.get_or_create(
+            run_id = SequencingRun.objects.get(run_id = Run_ID),
+            sample = record.get('Sample_ID',''),
+            sample_name = record.get('Sample_Name',''),
+            # paired_normal = record.get('Paired_Normal',''), # get this separately!
+            i7_index = record.get('I7_Index_ID',''),
+            index = record.get('index',''),
+            sample_project = record.get('Sample_Project',''),
+            description = record.get('Description',''),
+            genome_folder = record.get('GenomeFolder',''),
+            samplesheet = SequencingSampleSheet.objects.get(md5 = record.get('Sheet_md5'))
+        )

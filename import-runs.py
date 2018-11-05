@@ -43,19 +43,19 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
 
         # import to db
         SequencingRun.objects.get_or_create(
-            Run_ID = Run_ID,
-            Run_path = Run_path,
-            Sequencer_Serial = Sequencer_Serial,
-            Run_Num = Run_Num,
-            Flowcell_ID = Flowcell_ID,
-            Date = Date
+            run_id = Run_ID,
+            path = Run_path,
+            serial = Sequencer_Serial,
+            run_num = Run_Num,
+            flowcell = Flowcell_ID,
+            date = Date
             )
     else:
         # use empty values instead
         SequencingRun.objects.get_or_create(
-            Run_ID = Run_ID,
-            Run_path = Run_path,
-            Sequencer_Serial = Sequencer_Serial,
-            Run_Num = Run_Num,
-            Flowcell_ID = Flowcell_ID
+            run_id = Run_ID,
+            path = Run_path,
+            serial = Sequencer_Serial,
+            run_num = Run_Num,
+            flowcell = Flowcell_ID
             )

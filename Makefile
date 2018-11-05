@@ -40,6 +40,11 @@ init:
 	python manage.py migrate lims --database=lims_db
 	python manage.py createsuperuser
 
+# re-initialize just the databases
+reinit:
+	python manage.py makemigrations
+	python manage.py migrate
+	python manage.py migrate lims --database=lims_db
 
 # ~~~~~ RUN ~~~~~ #
 # shortcut commands for running and managing the app
@@ -96,6 +101,12 @@ py:
 import-lims-db:
 	$(MAKE) py CMD='import-runs.py $(RUNS)'
 	$(MAKE) py CMD='import-samplesheets.py $(SAMPLESHEETS)'
+	$(MAKE) py CMD='import-samplesheet-samples.py $(SAMPLESHEETS)'
+	$(MAKE) py CMD='import-samplesheet-pairs.py $(SAMPLESHEETS)'
+	$(MAKE) py CMD='import-seqtypes.py $(SAMPLESHEETS)'
+
+
+
 
 # remove all entries from data db's
 clear-db-runs:

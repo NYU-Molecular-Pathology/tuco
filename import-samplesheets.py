@@ -53,11 +53,11 @@ django.setup()
 from lims.models import SequencingSample, SequencingRun, SequencingSampleSheet
 
 
-sheets_dir = sys.argv[1]
+sheets_dir = os.path.realpath(sys.argv[1])
 
 #  find all the samplesheets in the dir
 for sheet_file in find.find(search_dir = sheets_dir, inclusion_patterns = ['SampleSheet.csv']):
-    sheet = samplesheet.IEMFile(path = sheet_file)
+    sheet = samplesheet.IEMFile(path = os.path.realpath(sheet_file))
     Run_ID = os.path.basename(os.path.dirname(sheet_file))
     pairs_sheet = os.path.join(os.path.dirname(sheet_file), 'samples.pairs.csv')
     seqtype_file = os.path.join(os.path.dirname(sheet_file), 'seqtype.txt')

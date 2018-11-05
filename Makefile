@@ -49,10 +49,10 @@ export DJANGO_DB:=db.sqlite3
 export DJANGO_ENABLE_DEBUG:=1
 
 # dirs containing sequencing samplesheets and runs
-SAMPLESHEETS:=example-data/samplesheets
-_SAMPLESHEETS:=$(shell python -c 'import os; print(os.path.realpath("$(SAMPLESHEETS)"));')
-RUNS:=example-data/runs
-_RUNS:=$(shell python -c 'import os; print(os.path.realpath("$(RUNS)"));')
+export SAMPLESHEETS:=example-data/samplesheets
+# _SAMPLESHEETS:=$(shell python -c 'import os; print(os.path.realpath("$(SAMPLESHEETS)"));')
+export RUNS:=example-data/runs
+# _RUNS:=$(shell python -c 'import os; print(os.path.realpath("$(RUNS)"));')
 
 CMD:=
 
@@ -94,7 +94,7 @@ py:
 
 # import all LIMS data from samplesheets into db's
 import-lims-db:
-	$(MAKE) py CMD='import-runs.py $(_RUNS)'
+	$(MAKE) py CMD='import-runs.py $(RUNS)'
 	$(MAKE) py CMD='import-samplesheets.py $(SAMPLESHEETS)'
 
 # remove all entries from data db's

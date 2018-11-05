@@ -22,7 +22,7 @@ import django
 django.setup()
 from lims.models import SequencingRun
 
-seq_dir = sys.argv[1]
+seq_dir = os.path.realpath(sys.argv[1])
 
 for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_patterns = ['.*'], level_limit = 0):
     Run_ID = os.path.basename(run_dir)

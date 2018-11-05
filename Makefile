@@ -44,9 +44,16 @@ init:
 # ~~~~~ RUN ~~~~~ #
 # shortcut commands for running and managing the app
 export SECRET_KEY:=$(shell cat ../secret-key.txt)
-export LIMS_DB:=$(shell python -c 'import os; print(os.path.realpath("../lims.sqlite3"));')
-export DJANGO_DB:=$(shell python -c 'import os; print(os.path.realpath("../db.sqlite3"));')
+export LIMS_DB:=lims.sqlite3
+export DJANGO_DB:=db.sqlite3
 export DJANGO_ENABLE_DEBUG:=1
+
+# dirs containing sequencing samplesheets and runs
+SAMPLESHEETS:=example-data/samplesheets
+_SAMPLESHEETS:=$(shell python -c 'import os; print(os.path.realpath("$(SAMPLESHEETS)"));')
+RUNS:=example-data/runs
+_RUNS:=$(shell python -c 'import os; print(os.path.realpath("$(RUNS)"));')
+
 CMD:=
 
 # run Django 'manage'
@@ -84,12 +91,10 @@ py:
 
 # ~~~~~ IMPORT/EXPORT DATA ~~~~~ #
 # add, remove, delete entries from the database
-# dir containing sequencing samplesheets
-SAMPLESHEETS:=../samplesheets
 
 # import all LIMS data from samplesheets into db's
 import-lims-db:
-	$(MAKE) py CMD='import-runs.py $(SAMPLESHEETS)'
+	$(MAKE) py CMD='import-runs.py $(_RUNS)'
 	$(MAKE) py CMD='import-samplesheets.py $(SAMPLESHEETS)'
 
 # remove all entries from data db's

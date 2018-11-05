@@ -60,7 +60,15 @@ for sheet_file in find.find(search_dir = sheets_dir, inclusion_patterns = ['Samp
     sheet = samplesheet.IEMFile(path = sheet_file)
     Run_ID = os.path.basename(os.path.dirname(sheet_file))
     pairs_sheet = os.path.join(os.path.dirname(sheet_file), 'samples.pairs.csv')
+    seqtype_file = os.path.join(os.path.dirname(sheet_file), 'seqtype.txt')
     pairs = False
+    Seq_Type = ''
+
+    # load seqtype
+    if os.path.exists(seqtype_file):
+        with open(seqtype_file) as f:
+            lines = f.readlines()
+            Seq_Type = lines[0].strip()
 
     # check if a pairs sheet exists; if so, import it and
     if os.path.exists(pairs_sheet):

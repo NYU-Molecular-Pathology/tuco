@@ -79,15 +79,15 @@ WSGI_APPLICATION = 'tuco.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.environ['DJANGO_DB'],
+        'NAME': os.path.realpath(os.environ['DJANGO_DB']),
     },
     'lims_db': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.environ['LIMS_DB'],
+        'NAME': os.path.realpath(os.environ['LIMS_DB']),
     }
 }
 
-DATABASE_ROUTERS = ['lims.routers.Router'] 
+DATABASE_ROUTERS = ['lims.routers.Router']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

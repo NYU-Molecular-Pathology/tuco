@@ -33,13 +33,6 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
     Sequencer_Serial = ''
     Run_Num = ''
     Flowcell_ID = ''
-    Seq_Type = ''
-
-    # load seqtype
-    if os.path.exists(seqtype_file):
-        with open(seqtype_file) as f:
-            lines = f.readlines()
-            Seq_Type = lines[0].strip()
 
     # check if Run_ID can be parsed
     if len(parts) == 4: # ['180711', 'NB501073', '0057', 'AHFLL2BGX7']
@@ -52,19 +45,16 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
         SequencingRun.objects.get_or_create(
             Run_ID = Run_ID,
             Run_path = Run_path,
-            # Sheet_path =
-            Seq_Type = Seq_Type,
             Sequencer_Serial = Sequencer_Serial,
             Run_Num = Run_Num,
             Flowcell_ID = Flowcell_ID,
             Date = Date
             )
     else:
+        # use empty values instead
         SequencingRun.objects.get_or_create(
             Run_ID = Run_ID,
             Run_path = Run_path,
-            # Sheet_path =
-            Seq_Type = Seq_Type,
             Sequencer_Serial = Sequencer_Serial,
             Run_Num = Run_Num,
             Flowcell_ID = Flowcell_ID

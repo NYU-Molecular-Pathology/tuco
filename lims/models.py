@@ -25,6 +25,8 @@ class SequencingSample(models.Model):
     description = models.TextField(blank=True, verbose_name = 'Description')
     genome_folder = models.TextField(blank=True, verbose_name = 'GenomeFolder')
     samplesheet = models.ForeignKey('SequencingSampleSheet', blank=True, null=True, on_delete=models.SET_NULL)
+    imported = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.sample
@@ -74,6 +76,8 @@ class SequencingSampleSheet(models.Model):
     adapter_sequence_read_1 = models.TextField(blank=True, verbose_name = 'AdapterSequenceRead1')
     adapter_sequence_read_2 = models.TextField(blank=True, verbose_name = 'AdapterSequenceRead2')
     hash = models.TextField(blank = True)
+    imported = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         """
@@ -115,9 +119,11 @@ class SequencingRun(models.Model):
     run_id = models.TextField(unique = True, verbose_name = 'Run ID')
     # path to directory where instrument outputs data for run
     path = models.FilePathField(blank=True, path = RUNS_DIR, recursive = False, allow_files = False, allow_folders = True)
-    serial = models.TextField(blank=True)
+    device_serial = models.TextField(blank=True)
     run_num = models.TextField(blank=True)
     flowcell = models.TextField(blank=True)
-    date = models.DateField(blank=True, null=True)
+    run_date = models.DateField(blank=True, null=True)
+    imported = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.run_id

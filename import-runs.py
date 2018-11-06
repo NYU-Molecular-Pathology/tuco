@@ -45,17 +45,17 @@ for run_dir in  find.find(search_dir = seq_dir, search_type = 'dir', exclusion_p
         SequencingRun.objects.get_or_create(
             run_id = Run_ID,
             path = Run_path,
-            serial = Sequencer_Serial,
+            device_serial = Sequencer_Serial,
             run_num = Run_Num,
             flowcell = Flowcell_ID,
-            date = Date
+            run_date = Date
             )
     else:
         # use empty values instead
         SequencingRun.objects.get_or_create(
             run_id = Run_ID,
             path = Run_path,
-            serial = Sequencer_Serial,
+            device_serial = Sequencer_Serial,
             run_num = Run_Num,
             flowcell = Flowcell_ID
             )

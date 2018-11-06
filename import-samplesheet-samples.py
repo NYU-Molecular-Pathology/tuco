@@ -44,7 +44,6 @@ $ python import-samplesheets.py samplesheets/
 import os
 import sys
 import csv
-import getpass
 from util import samplesheet
 from util import find
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")

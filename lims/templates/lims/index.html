@@ -6,7 +6,7 @@
 {% if latest_runs %}
     <ul>
     {% for run in latest_runs %}
-        <li><a href="{% url 'lims:run' run.id %}">{{ run.Run_ID }}</a></li>
+        <li><a href="{% url 'lims:run' run.id %}">{{ run }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -28,7 +28,7 @@
 {% if latest_samples %}
     <ul>
     {% for sample in latest_samples %}
-        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample.Sample_ID }}</a></li>
+        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

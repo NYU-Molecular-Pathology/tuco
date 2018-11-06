@@ -7,10 +7,6 @@ unexport PYTHONPATH
 unexport PYTHONHOME
 
 # install versions of conda for Mac or Linux, Python 2 or 3
-# Python 3.6.5 |Anaconda, Inc.| (default, Apr 29 2018, 16:14:56)
-# [GCC 7.2.0]
-# 2.7.15 |Anaconda, Inc.| (default, May  1 2018, 18:37:05)
-# [GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)]
 ifeq ($(UNAME), Darwin)
 CONDASH:=Miniconda3-4.5.4-MacOSX-x86_64.sh
 endif
@@ -48,7 +44,8 @@ reinit:
 
 # ~~~~~ RUN ~~~~~ #
 # shortcut commands for running and managing the app
-export SECRET_KEY:=$(shell cat ../secret-key.txt)
+# export SECRET_KEY:=$(shell cat ../secret-key.txt)
+export SECRET_KEY:=foo
 export LIMS_DB:=lims.sqlite3
 export DJANGO_DB:=db.sqlite3
 export MEDIA_ROOT:=uploads

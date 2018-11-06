@@ -6,7 +6,7 @@
 {% if samples %}
     <ul>
     {% for sample in samples %}
-        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample.Sample_ID }}</a></li>
+        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

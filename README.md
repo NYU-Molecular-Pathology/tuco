@@ -35,15 +35,11 @@ make import-lims-db SAMPLESHEETS=/path/to/samplesheets-dir/
 You can demo the app with the included example data:
 
 ```
-make conda-install
+# setup
+make conda-install init import-lims-db SECRET_KEY=foo
 
-LIMS_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/lims.sqlite")"
-DJANGO_DB="$(echo "$(python -c 'import os; print(os.path.realpath("."))')/db.sqlite")"
-make init SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
-
-make import-lims-db SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"  SAMPLESHEETS=example-samplesheets/
-
-make runserver SECRET_KEY=foo LIMS_DB="${LIMS_DB}" DJANGO_DB="${DJANGO_DB}"
+# run
+make runserver SECRET_KEY=foo
 
 # navigate to http://127.0.0.1:8000/admin in web browser
 ```

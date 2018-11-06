@@ -9,7 +9,7 @@ from django.views import generic
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.timezone import now
-
+from django.forms.models import model_to_dict
 
 from .models import SequencingSample, SequencingSampleSheet, SequencingRun
 from .forms import SequencingSampleSheetForm
@@ -120,7 +120,7 @@ class RunsList(generic.ListView):
 
     def get_queryset(self):
         """Return the last five runs """
-        return SequencingRun.objects.order_by('imported')[:5]
+        return SequencingRun.objects.order_by('imported')
 
 class SampleSheetList(generic.ListView):
     template_name = 'lims/samplesheets_list.html'
@@ -128,7 +128,7 @@ class SampleSheetList(generic.ListView):
 
     def get_queryset(self):
         """Return the last five samplesheets """
-        return SequencingSampleSheet.objects.order_by('imported')[:5]
+        return SequencingSampleSheet.objects.order_by('imported')
 
 class SamplesList(generic.ListView):
     template_name = 'lims/samples_list.html'
@@ -136,7 +136,7 @@ class SamplesList(generic.ListView):
 
     def get_queryset(self):
         """Return the last five samples """
-        return SequencingSample.objects.order_by('imported')[:5]
+        return SequencingSample.objects.order_by('imported')
 
 class SampleDetail(generic.DetailView):
     pk_url_kwarg = 'id'
@@ -144,14 +144,32 @@ class SampleDetail(generic.DetailView):
     context_object_name = 'sample'
     template_name = 'lims/sample_detail.html'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['data'] = model_to_dict(context['sample'])
+        return context
+
 class RunDetail(generic.DetailView):
     pk_url_kwarg = 'id'
     model = SequencingRun
     context_object_name = 'run'
     template_name = 'lims/run_detail.html'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['data'] = model_to_dict(context['run'])
+        return context
+
 class SampleSheetDetail(generic.DetailView):
     pk_url_kwarg = 'id'
     model = SequencingSampleSheet
     context_object_name = 'samplesheet'
     template_name = 'lims/samplesheet_detail.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['data'] = model_to_dict(context['samplesheet'])
+        return context

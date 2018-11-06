@@ -4,10 +4,27 @@
 <h2>Run Details</h2>
 
 {% if run %}
-<h3>{{ run.Run_ID }}</h3>
+<h3>{{ run }}</h3>
 {% else %}
     <p>No run provided.</p>
 {% endif %}
 
+{% if data %}
+
+<table>
+
+<tr>
+<th>Attribute</th><th>Value</th>
+</tr>
+
+{% for k, v in data.items %}
+    <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+{% endfor %}
+
+</table>
+
+{% else %}
+    <p>No data provided for sample.</p>
+{% endif %}
 
 {% endblock content %}

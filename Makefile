@@ -51,6 +51,7 @@ reinit:
 export SECRET_KEY:=$(shell cat ../secret-key.txt)
 export LIMS_DB:=lims.sqlite3
 export DJANGO_DB:=db.sqlite3
+export MEDIA_ROOT:=uploads
 export DJANGO_ENABLE_DEBUG:=1
 
 # dirs containing sequencing samplesheets and runs

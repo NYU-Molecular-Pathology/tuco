@@ -1,6 +1,9 @@
 import os
 import hashlib
+import datetime
 from django.db import models
+from django.core.files import File
+from django.utils.timezone import now
 
 SAMPLESHEETS_DIR = os.path.realpath(os.environ['SAMPLESHEETS'])
 RUNS_DIR = os.path.realpath(os.environ['RUNS'])
@@ -26,6 +29,19 @@ class SequencingSample(models.Model):
     def __str__(self):
         return self.sample
 
+
+def samplesheet_upload_path(instance, filename):
+    """
+    user uploaded samplesheet file will be uploaded to MEDIA_ROOT/<date>/<run_id>/<filename>
+    """
+    p = '{0}/{1}/{2}'.format(
+    datetime.datetime.strftime(now(), '%Y-%m-%d'),
+    instance.run_id.run_id,
+    os.path.basename(filename)
+    )
+    return(p)
+
+
 class SequencingSampleSheet(models.Model):
     """
     Database model for an IEM formatted SampleSheet.csv file, used for demultiplexing with bcl2fastq
@@ -34,6 +50,8 @@ class SequencingSampleSheet(models.Model):
     run_id = models.ForeignKey('SequencingRun', blank=True, null=True, on_delete=models.SET_NULL, db_column = 'run_id')
     # path to externally imported samplesheet file
     path = models.FilePathField(path = SAMPLESHEETS_DIR, blank = True, recursive = True, match = 'SampleSheet.csv')
+    # user uploaded sheet file
+    file = models.FileField(upload_to = samplesheet_upload_path)
     md5 = models.TextField(blank=True, unique = True)
     host = models.TextField(blank=True)
 
@@ -62,6 +80,7 @@ class SequencingSampleSheet(models.Model):
         update the 'hash' field with the entry attributes
         to ensure a unique, recognizable ID for each entry
         """
+        # update the hash
         d = {
         'run_id' : self.run_id.run_id, # get the string here !!
         'path': self.path,
@@ -75,6 +94,14 @@ class SequencingSampleSheet(models.Model):
             # python 3.x
             md5 = hashlib.md5( str(''.join(d.values())).encode('utf-8') ).hexdigest()
         self.hash = md5
+
+        # if a path exists but an upload file does not, save the path into the file
+        if not self.file and self.path:
+            # with open(self.path, 'rb') as f:
+            f = open(self.path, 'rb')
+            self.file = File(f)
+
+        # call the parent save method
         super().save(*args, **kwargs)
 
     def __str__(self):

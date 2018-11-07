@@ -16,8 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from . import views
+
+app_name = 'tuco'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('lims/', include('lims.urls')),
-    path('', include('lims.urls'))
+    path('', views.HomeView.as_view(), name='home')
 ]

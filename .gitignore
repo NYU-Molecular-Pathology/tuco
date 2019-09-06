@@ -9,3 +9,4 @@ uploads
 Miniconda3-4.5.4-MacOSX-x86_64.sh*
 .DS_Store
 db
+*/*migrations/0*

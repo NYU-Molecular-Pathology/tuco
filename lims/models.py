@@ -4,22 +4,7 @@ import datetime
 from django.db import models
 from django.core.files import File
 from django.utils.timezone import now
-
-SAMPLESHEETS_DIR = os.path.realpath(os.environ['SAMPLESHEETS'])
-RUNS_DIR = os.path.realpath(os.environ['RUNS'])
-
-def samplesheet_upload_path(instance, filename):
-    """
-    user uploaded samplesheet file will be uploaded to MEDIA_ROOT/<run_type>/<date>/<run_id>/<filename>
-    """
-    # p = '{0}/{1}/{2}/{3}'.format(...)
-    p = os.path.join(
-        datetime.datetime.strftime(now(), '%Y-%m-%d'),
-        instance.type,
-        instance.run_id.run_id,
-        os.path.basename(filename)
-    )
-    return(p)
+# RUNS_DIR = os.path.realpath(os.environ['RUNS'])
 
 experiment_types = (
 ('FUSION-SEQer', 'FUSION-SEQer'), # Archer
@@ -82,17 +67,34 @@ class SampleExperiment(models.Model):
             models.UniqueConstraint(fields = ['experiment_id','sample_id'], name = 'unique_experiment_id_type'),
             ]
 
-# class Samplesheet(models.Model):
+# SAMPLESHEETS_EXTERNAL_DIR = os.path.realpath(os.environ['SAMPLESHEETS_EXTERNAL_DIR'])
+def samplesheet_upload_path(instance, filename):
+    """
+    user uploaded samplesheet file will be uploaded to MEDIA_ROOT/<experiment_type>/<experiment_id>/<filename>
+    """
+    # p = '{0}/{1}/{2}/{3}'.format(...) datetime.datetime.strftime(now(), '%Y-%m-%d'),
+    p = os.path.join(
+        instance.experiment.type,
+        instance.experiment.experiment_id,
+        os.path.basename(filename)
+    )
+    return(p)
+
+class Samplesheet(models.Model):
+    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE)
+    # user uploaded sheet file
+    file = models.FileField(upload_to = samplesheet_upload_path)
+    imported = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{0}".format(self.file)
+    # path to externally imported samplesheet file
+    # external_path = models.FilePathField(path = SAMPLESHEETS_EXTERNAL_DIR, blank = True, recursive = True, match = 'SampleSheet.csv')
 #     run_id = models.ForeignKey('Experiment', blank=True, null=True, db_column = 'run_id', on_delete = models.CASCADE)
 #     type = models.CharField(choices=experiment_types, max_length=10)
 #     md5 = models.TextField(blank=True, unique = True) # file identifier
 #     hash = models.TextField(blank = True) # db entry identifier
-#     # path to externally imported samplesheet file
-#     path = models.FilePathField(path = SAMPLESHEETS_DIR, blank = True, recursive = True, match = 'SampleSheet.csv')
-#     # user uploaded sheet file
-#     file = models.FileField(upload_to = samplesheet_upload_path)
-#     imported = models.DateTimeField(auto_now_add=True)
-#     updated = models.DateTimeField(auto_now=True)
 #
 #     def save(self, *args, **kwargs):
 #         """

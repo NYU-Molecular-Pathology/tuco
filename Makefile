@@ -56,7 +56,7 @@ export MEDIA_ROOT:=uploads
 export DJANGO_ENABLE_DEBUG:=1
 
 # dirs containing sequencing samplesheets and runs
-export SAMPLESHEETS:=example-data/samplesheets
+export SAMPLESHEETS_EXTERNAL_DIR:=$(CURDIR)/examples/samplesheets
 # _SAMPLESHEETS:=$(shell python -c 'import os; print(os.path.realpath("$(SAMPLESHEETS)"));')
 export RUNS:=example-data/runs
 # _RUNS:=$(shell python -c 'import os; print(os.path.realpath("$(RUNS)"));')

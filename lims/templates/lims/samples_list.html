@@ -1,0 +1,16 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Sample List</h2>
+
+{% if samples %}
+    <ul>
+    {% for sample in samples %}
+        <li><a href="{% url 'lims:sample' sample.id %}">{{ sample }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No samples are available.</p>
+{% endif %}
+
+{% endblock content %}

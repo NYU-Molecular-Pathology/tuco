@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Run List</h2>
+{% if runs %}
+    <ul>
+    {% for run in runs %}
+        <li><a href="{% url 'lims:run' run.id %}">{{ run }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No runs are available.</p>
+{% endif %}
+
+{% endblock content %}

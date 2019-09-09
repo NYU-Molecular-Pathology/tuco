@@ -1,0 +1,14 @@
+conda
+*.pyc
+*__pycache__*
+*.sqlite
+*.sqlite3
+lims.sqlite3
+db.sqlite3
+uploads
+Miniconda3-4.5.4-MacOSX-x86_64.sh*
+.DS_Store
+db
+nextflow/nextflow
+*/migrations/0*.py
+backup/

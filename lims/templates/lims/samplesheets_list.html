@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Samplesheet List</h2>
+{% if samplesheets %}
+    <ul>
+    {% for samplesheet in samplesheets %}
+        <li><a href="{% url 'lims:samplesheet' samplesheet.id %}">{{ samplesheet|stringformat:"s" }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No samplesheets are available.</p>
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<h2>Sample Details</h2>
+
+{% if sample %}
+<h3>{{ sample }}</h3>
+{% else %}
+    <p>No sample provided.</p>
+{% endif %}
+
+{% if data %}
+
+<table>
+
+<tr>
+<th>Attribute</th><th>Value</th>
+</tr>
+
+{% for k, v in data.items %}
+    <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+{% endfor %}
+
+</table>
+
+{% else %}
+    <p>No data provided for sample.</p>
+{% endif %}
+
+
+{% endblock content %}

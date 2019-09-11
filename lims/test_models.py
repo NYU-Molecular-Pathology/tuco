@@ -12,7 +12,7 @@ class TestLIMS(TestCase):
         instance = Experiment.objects.create(experiment_id = 'Experiment3', type = 'NGS580')
         instance = Experiment.objects.create(experiment_id = 'Experiment4', type = 'NGS629')
         sample1_instance = Sample.objects.create(sample_id = 'Sample1')
-        SampleExperiment.objects.create(sample_id = sample1_instance, experiment_id = exp1_instance)
+        SampleExperiment.objects.create(sample = sample1_instance, experiment = exp1_instance)
 
     def test_true(self):
         """
@@ -43,7 +43,7 @@ class TestLIMS(TestCase):
         # test that you can get a specific sample_experiment instance out of the database by run_ID
         sample1_instance = Sample.objects.get(sample_id = 'Sample1')
         exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
-        instance = SampleExperiment.objects.get(sample_id = sample1_instance, experiment_id = exp1_instance)
-        self.assertTrue(instance.sample_id.sample_id == 'Sample1')
-        self.assertTrue(instance.experiment_id.experiment_id == 'Experiment1')
-        self.assertTrue(instance.experiment_id.type == 'NGS580')
+        instance = SampleExperiment.objects.get(sample = sample1_instance, experiment = exp1_instance)
+        self.assertTrue(instance.sample.sample_id == 'Sample1')
+        self.assertTrue(instance.experiment.experiment_id == 'Experiment1')
+        self.assertTrue(instance.experiment.type == 'NGS580')

@@ -15,7 +15,7 @@ sys.path.insert(0, parentdir)
 from util import find, samplesheet
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")
 django.setup()
-from lims.models import Experiment, NGS580Experiment, NGS580SampleSheet, NGS580Sample, Sample, Samplesheet
+from lims.models import Experiment, Sample, Samplesheet # NGS580Experiment, NGS580SampleSheet, NGS580Sample,
 sys.path.pop(0)
 
 def import_Sample(sample, runID):
@@ -161,32 +161,32 @@ def import_NGS580samplesheets(samplesheets):
         #                     sample_instance.save(update_fields=['paired_normal'])
     return(all_created, not_created)
 
-def import_NGS580experiment(runID, dir):
-    """
-    """
-    experiment = Experiment.objects.get(run_id = runID)
-    parts = runID.split('_')
-    # check if runID can be parsed
-    if len(parts) == 4: # ['180711', 'NB501073', '0057', 'AHFLL2BGX7']
-        run_date = datetime.datetime.strptime(parts[0], '%y%m%d')
-        instrument = parts[1]
-        run_num = parts[2]
-        flowcell = parts[3]
-
-        # import to db
-        NGS580Experiment.objects.get_or_create(
-            run_id = experiment,
-            path = dir,
-            run_date = run_date,
-            instrument = instrument,
-            run_num = run_num,
-            flowcell = flowcell
-            )
-    else:
-        NGS580Experiment.objects.get_or_create(
-            run_id = experiment,
-            path = dir
-            )
+# def import_NGS580experiment(runID, dir):
+#     """
+#     """
+#     experiment = Experiment.objects.get(run_id = runID)
+#     parts = runID.split('_')
+#     # check if runID can be parsed
+#     if len(parts) == 4: # ['180711', 'NB501073', '0057', 'AHFLL2BGX7']
+#         run_date = datetime.datetime.strptime(parts[0], '%y%m%d')
+#         instrument = parts[1]
+#         run_num = parts[2]
+#         flowcell = parts[3]
+#
+#         # import to db
+#         NGS580Experiment.objects.get_or_create(
+#             run_id = experiment,
+#             path = dir,
+#             run_date = run_date,
+#             instrument = instrument,
+#             run_num = run_num,
+#             flowcell = flowcell
+#             )
+#     else:
+#         NGS580Experiment.objects.get_or_create(
+#             run_id = experiment,
+#             path = dir
+#             )
 
 def import_experiment(runID):
     """
@@ -240,8 +240,8 @@ def import_experiments_dir(dir):
                 lines = f.readlines()
                 exptype = lines[0].strip()
             update_experiment_type(runID = os.path.basename(importDir), type = exptype)
-        if exptype == 'NGS580':
-            import_NGS580experiment(runID = os.path.basename(importDir), dir = os.path.realpath(importDir))
+        # if exptype == 'NGS580':
+        #     import_NGS580experiment(runID = os.path.basename(importDir), dir = os.path.realpath(importDir))
 
 def import_samplesheets(samplesheets):
     all_created = []
@@ -289,9 +289,9 @@ if __name__ == '__main__':
     # type of thing to import from that location
     inputType = sys.argv[2]
 
-    if inputType == 'exps':
-        import_experiments_dir(dir = inputItem)
-    elif inputType == 'NGS580samplesheets':
-        import_NGS580samplesheets_dir(dir = inputItem)
-    else:
-        print('ERROR: did not recognize input type arg')
+    # if inputType == 'exps':
+    #     import_experiments_dir(dir = inputItem)
+    # elif inputType == 'NGS580samplesheets':
+    #     import_NGS580samplesheets_dir(dir = inputItem)
+    # else:
+    #     print('ERROR: did not recognize input type arg')

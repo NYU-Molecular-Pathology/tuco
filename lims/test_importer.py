@@ -61,3 +61,14 @@ class TestImporter(TestCase):
         experiment_instance, created = importer.import_experiment_from_json(json_file = TEST_EXPERIMENT_JSON1)
         self.assertTrue(created)
         self.assertTrue(experiment_instance.type == 'FUSION-SEQer')
+
+    def test_get_sampleIDs_from_samplesheet1(self):
+        expected_sample_ids = ['NTC-1-H2O', 'NTC-2-H2O', 'SC-SERACARE', 'NC-HAPMAP', 'SampleAJ2', 'SampleAJ3', 'SampleAJ4', 'SampleAJ5', 'SampleAJ6', 'SampleAJ7', 'SampleAJ8', 'SampleAJ9', 'SampleAJ10', 'SampleAJ11', 'SampleAJ12', 'SampleAJ13', 'SampleAJ14', 'SampleAJ15', 'SampleAJ16', 'SampleAJ17', 'SampleAJ18', 'SampleAJ19', 'SampleAJ20', 'SampleAJ21', 'SampleAJ22', 'SampleAJ23', 'SampleAJ24', 'SampleAJ25', 'SampleAJ26', 'SampleAJ27', 'SampleAJ28', 'SampleAJ29']
+        sampleIDs = importer.get_sampleIDs_from_samplesheet(TEST_SAMPLESHEET1)
+        self.assertTrue(expected_sample_ids == sampleIDs)
+
+    def test_import_samples_from_samplesheet1(self):
+        sampleIDs = importer.get_sampleIDs_from_samplesheet(TEST_SAMPLESHEET1)
+        for sampleID in sampleIDs:
+            sample_instance, created = importer.import_sample(sample_id = sampleID)
+            self.assertTrue(created)

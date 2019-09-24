@@ -14,7 +14,7 @@ import json
 # intialize Django app to import the
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, parentdir)
-# from util import find, samplesheet
+from util import samplesheet # find
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")
 # django.setup()
 from lims.models import Experiment, Sample, Samplesheet
@@ -49,15 +49,20 @@ def import_experiment_from_json(json_file):
     instance, created = import_experiment(experiment_id = data.get('experiment_id'), type = data.get('type'))
     return(instance, created)
 
+def get_sampleIDs_from_samplesheet(iem_file):
+    """
+    Get a list of sample IDs from an IEM formatted samplesheet (SampleSheet.csv)
+    """
+    sheet = samplesheet.IEMFile(path = iem_file)
+    sampleIDs = [ s['Sample_ID'] for s in sheet.data['Data']['Samples'] ]
+    return(sampleIDs)
 
-# def import_Sample(sample, runID):
-#     """
-#     """
-#     instance, created = Sample.objects.get_or_create(
-#         sample = sample,
-#         run_id =  runID,
-#         )
-#     return(instance, created)
+def import_sample(sample_id):
+    """
+    Import a sample into the database
+    """
+    instance, created = Sample.objects.get_or_create(sample_id = sample_id)
+    return(instance, created)
 
 # def import_NGS580sample(sample, sample_data, runID, sheet):
 #     """

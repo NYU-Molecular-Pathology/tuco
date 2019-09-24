@@ -51,20 +51,20 @@ class SampleExperiment(models.Model):
     """
     A listing for a specific sample's usage in a specific experiment
     """
-    sample = models.ForeignKey('Sample', blank = False, null = False, db_column = 'sample_id', on_delete = models.CASCADE)
-    experiment = models.ForeignKey('Experiment', blank = False, null = False, db_column = 'experiment_id', on_delete = models.CASCADE)
+    sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
+    experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
     imported = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return "[{0} : {1}] {2}".format(
-            self.experiment_id.type[:6],
-            self.experiment_id.experiment_id,
-            self.sample_id.sample_id)
+            self.experiment.type[:6],
+            self.experiment.experiment_id,
+            self.sample.sample_id)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields = ['experiment_id','sample_id'], name = 'unique_experiment_id_type'),
+            models.UniqueConstraint(fields = ['experiment','sample'], name = 'unique_experiment_id_type'),
             ]
 
 # SAMPLESHEETS_EXTERNAL_DIR = os.path.realpath(os.environ['SAMPLESHEETS_EXTERNAL_DIR'])

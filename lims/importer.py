@@ -5,6 +5,7 @@ Importation of experiments, runs, samples, etc. for the app database
 """
 import os
 import sys
+import json
 # import django
 # import datetime
 # import csv
@@ -18,6 +19,36 @@ sys.path.insert(0, parentdir)
 # django.setup()
 from lims.models import Experiment, Sample, Samplesheet
 sys.path.pop(0)
+
+def import_experiment(experiment_id, type):
+    """
+    Import an experiment to the database
+    """
+    instance, created = Experiment.objects.get_or_create(
+        experiment_id = experiment_id,
+        type =  type,
+        )
+    return(instance, created)
+
+def parse_experiment_json(json_str):
+    """
+    Get selected values from JSON formatted string.
+    """
+    d = json.loads(json_str)
+    data = {}
+    data['experiment_id'] = d.get('experiment_id')
+    data['type'] = d.get('type')
+    return(data)
+
+def import_experiment_from_json(json_file):
+    """
+    Import an experiment from a JSON file
+    """
+    with open(json_file) as f:
+        data = parse_experiment_json(f.read())
+    instance, created = import_experiment(experiment_id = data.get('experiment_id'), type = data.get('type'))
+    return(instance, created)
+
 
 # def import_Sample(sample, runID):
 #     """

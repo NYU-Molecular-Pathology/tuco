@@ -2,21 +2,21 @@ import os
 from django.test import TestCase, override_settings
 from django.core.files import File
 from .models import Experiment, Sample, SampleExperiment, Samplesheet
-from django.conf import settings 
+from django.conf import settings
 import shutil
 # https://docs.djangoproject.com/en/2.2/topics/testing/tools/
 
 # location for media uploads during testing
 MEDIA_ROOT_TEST = os.path.realpath(os.environ['MEDIA_ROOT_TEST'])
 FIXTURES_DIR = os.path.realpath(os.environ['FIXTURES_DIR'])
-TEST_SAMPLESHEET1 = os.path.join(FIXTURES_DIR, 'Experiment1', 'SampleSheet.csv')
+TEST_SAMPLESHEET1 = os.path.join(FIXTURES_DIR, 'experiments', 'Experiment1', 'SampleSheet.csv')
 
 @override_settings(MEDIA_ROOT = MEDIA_ROOT_TEST)
 class TestLIMS(TestCase):
     databases = '__all__'
 
     @classmethod # causes setup to only run once per instance of this class, instead of before every test
-    def setUpTestData(self):
+    def setUpTestData(cls):
         # make demo fake db entries
         exp1_instance = Experiment.objects.create(experiment_id = 'Experiment1', type = 'NGS580')
         instance = Experiment.objects.create(experiment_id = 'Experiment2', type = 'FUSION-SEQer')

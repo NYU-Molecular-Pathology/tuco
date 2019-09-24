@@ -24,7 +24,9 @@ conda:
 
 conda-install: conda
 	conda install -y \
-	django=2.2.5
+	django=2.2.5 \
+	conda=4.5.4 \
+	sqlparse=0.3.0
 
 # ~~~~~ SETUP DJANGO APP ~~~~~ #
 # setting up & re-setting up the app

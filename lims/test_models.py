@@ -2,7 +2,7 @@ import os
 from django.test import TestCase, override_settings
 from django.core.files import File
 from .models import Experiment, Sample, SampleExperiment, Samplesheet
-from django.conf import settings # print()
+from django.conf import settings 
 import shutil
 # https://docs.djangoproject.com/en/2.2/topics/testing/tools/
 

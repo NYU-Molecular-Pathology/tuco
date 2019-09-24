@@ -4,7 +4,6 @@ import datetime
 from django.db import models
 from django.core.files import File
 from django.utils.timezone import now
-# RUNS_DIR = os.path.realpath(os.environ['RUNS'])
 
 experiment_types = (
 ('FUSION-SEQer', 'FUSION-SEQer'), # Archer
@@ -216,7 +215,7 @@ class Samplesheet(models.Model):
 #     def __str__(self):
 #         msg = '{0} [{1}]'.format(self.run_id, self.hash[0:6])
 #         return msg
-#
+## RUNS_DIR = os.path.realpath(os.environ['RUNS'])
 # class NGS580Experiment(models.Model):
 #     """
 #     Database model for a sequencing run, as output by the sequencer

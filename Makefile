@@ -53,8 +53,9 @@ export SECRET_KEY:=foo
 export LIMS_DB:=$(DB_DIR)/lims.sqlite3
 export DJANGO_DB:=$(DB_DIR)/db.sqlite3
 export MEDIA_ROOT:=uploads
+export MEDIA_ROOT_TEST:=uploads-test
 export DJANGO_ENABLE_DEBUG:=1
-
+export FIXTURES_DIR:=fixtures
 # dirs containing sequencing samplesheets and runs
 export SAMPLESHEETS_EXTERNAL_DIR:=$(CURDIR)/examples/samplesheets
 # _SAMPLESHEETS:=$(shell python -c 'import os; print(os.path.realpath("$(SAMPLESHEETS)"));')

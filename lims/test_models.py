@@ -1,9 +1,20 @@
-from django.test import TestCase
-from .models import Experiment, Sample, SampleExperiment
+import os
+from django.test import TestCase, override_settings
+from django.core.files import File
+from .models import Experiment, Sample, SampleExperiment, Samplesheet
+from django.conf import settings # print()
+import shutil
+# https://docs.djangoproject.com/en/2.2/topics/testing/tools/
 
-# Create your tests here.
+# location for media uploads during testing
+MEDIA_ROOT_TEST = os.path.realpath(os.environ['MEDIA_ROOT_TEST'])
+FIXTURES_DIR = os.path.realpath(os.environ['FIXTURES_DIR'])
+TEST_SAMPLESHEET1 = os.path.join(FIXTURES_DIR, 'Experiment1', 'SampleSheet.csv')
+
+@override_settings(MEDIA_ROOT = MEDIA_ROOT_TEST)
 class TestLIMS(TestCase):
     databases = '__all__'
+
     @classmethod # causes setup to only run once per instance of this class, instead of before every test
     def setUpTestData(self):
         # make demo fake db entries
@@ -12,7 +23,16 @@ class TestLIMS(TestCase):
         instance = Experiment.objects.create(experiment_id = 'Experiment3', type = 'NGS580')
         instance = Experiment.objects.create(experiment_id = 'Experiment4', type = 'NGS629')
         sample1_instance = Sample.objects.create(sample_id = 'Sample1')
-        SampleExperiment.objects.create(sample_id = sample1_instance, experiment_id = exp1_instance)
+        SampleExperiment.objects.create(sample = sample1_instance, experiment = exp1_instance)
+        Samplesheet.objects.create(experiment = exp1_instance,
+            file = File(open(TEST_SAMPLESHEET1), name = TEST_SAMPLESHEET1) )
+
+    @classmethod
+    def tearDownClass(cls):
+        # cleanup goes here
+        if os.path.exists(MEDIA_ROOT_TEST):
+            shutil.rmtree(MEDIA_ROOT_TEST)
+        super().tearDownClass()
 
     def test_true(self):
         """
@@ -43,7 +63,15 @@ class TestLIMS(TestCase):
         # test that you can get a specific sample_experiment instance out of the database by run_ID
         sample1_instance = Sample.objects.get(sample_id = 'Sample1')
         exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
-        instance = SampleExperiment.objects.get(sample_id = sample1_instance, experiment_id = exp1_instance)
-        self.assertTrue(instance.sample_id.sample_id == 'Sample1')
-        self.assertTrue(instance.experiment_id.experiment_id == 'Experiment1')
-        self.assertTrue(instance.experiment_id.type == 'NGS580')
+        sample_experiment_instance = SampleExperiment.objects.get(sample = sample1_instance, experiment = exp1_instance)
+        self.assertTrue(sample_experiment_instance.sample.sample_id == 'Sample1')
+        self.assertTrue(sample_experiment_instance.experiment.experiment_id == 'Experiment1')
+        self.assertTrue(sample_experiment_instance.experiment.type == 'NGS580')
+
+    def test_samplesheet1(self):
+        # test that an imported samplesheet entry exists
+        exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
+        samplesheet_instance = Samplesheet.objects.get(experiment = exp1_instance)
+        self.assertTrue(samplesheet_instance.experiment.experiment_id == 'Experiment1')
+        samplesheet_path = os.path.join(settings.MEDIA_ROOT, samplesheet_instance.file.name)
+        self.assertTrue(samplesheet_path)

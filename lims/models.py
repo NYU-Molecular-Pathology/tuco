@@ -16,8 +16,8 @@ class Experiment(models.Model):
     An experiment conducted by the wet lab
     Example: sequencing runs, methylation array, etc.
     """
-    experiment_id = models.CharField(verbose_name = 'Experiment ID (Run ID)', max_length=255) # unique = True,
-    type = models.CharField(choices = experiment_types, max_length=255, blank = False, null = False)
+    experiment_id = models.CharField(verbose_name = 'Experiment ID (Run ID)', max_length = 255) # unique = True,
+    type = models.CharField(choices = experiment_types, max_length = 255, blank = False, null = False)
     imported = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
@@ -41,8 +41,8 @@ class Sample(models.Model):
     A unique physical sample processed by the wet lab
     """
     sample_id = models.CharField(max_length = 255, verbose_name = 'Sample ID', unique = True, blank = False, null = False)
-    imported = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    imported = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return "{0}".format(self.sample_id)
@@ -51,10 +51,10 @@ class SampleExperiment(models.Model):
     """
     A listing for a specific sample's usage in a specific experiment
     """
-    sample_id = models.ForeignKey('Sample', blank=False, null=False, db_column = 'sample_id', on_delete = models.CASCADE)
-    experiment_id = models.ForeignKey('Experiment', blank=False, null=False, db_column = 'experiment_id', on_delete = models.CASCADE)
-    imported = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    sample = models.ForeignKey('Sample', blank = False, null = False, db_column = 'sample_id', on_delete = models.CASCADE)
+    experiment = models.ForeignKey('Experiment', blank = False, null = False, db_column = 'experiment_id', on_delete = models.CASCADE)
+    imported = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return "[{0} : {1}] {2}".format(
@@ -84,8 +84,8 @@ class Samplesheet(models.Model):
     experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE)
     # user uploaded sheet file
     file = models.FileField(upload_to = samplesheet_upload_path)
-    imported = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    imported = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return "{0}".format(self.file)

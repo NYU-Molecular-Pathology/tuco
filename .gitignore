@@ -12,3 +12,5 @@ db
 nextflow/nextflow
 */migrations/0*.py
 backup/
+.coverage
+uploads*

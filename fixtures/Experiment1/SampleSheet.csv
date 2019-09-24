@@ -1,0 +1,52 @@
+[Header],,,,,,
+IEMFileVersion,4,,,,,
+Investigator Name,,,,,,
+Project Name,Experiment1,,,,,
+Experiment Name,Experiment1,,,,,
+Date,11/15/2017,,,,,
+Workflow,GenerateFASTQ,,,,,
+Application,FASTQ Only,,,,,
+Assay,KAPA-IDT,,,,,
+Description,Description,,,,,
+Chemistry,Capture Enrichment,,,,,
+[Reads],,,,,,
+151,,,,,,
+151,,,,,,
+[Settings],,,,,,
+AdapterSequenceRead1,AGATCGGAAGAGCACACGTC,,,,,
+AdapterSequenceRead2,AGATCGGAAGAGCGTCGTGT,,,,,
+,,,,,,
+[Data],,,,,,
+Sample_ID,Sample_Name,I7_Index_ID,index,Sample_Project,Description,GenomeFolder
+NTC-1-H2O,NTC-1-H2O,A010,ACAAGCTA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+NTC-2-H2O,NTC-2-H2O,A022,ACGTATCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SC-SERACARE,SC-SERACARE,A034,CAGCGTTA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+NC-HAPMAP,NC-HAPMAP,A046,GAATCTGA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ2,SampleAJ2,A058,GTCTGTCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ3,SampleAJ3,A070,AAGAGATC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ4,SampleAJ4,A082,ATTGGCTC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ5,SampleAJ5,A094,GAGTTAGC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ6,SampleAJ6,A011,CTGTAGCC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ7,SampleAJ7,A023,ACTATGCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ8,SampleAJ8,A035,CATACCAA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ9,SampleAJ9,A047,CAAGACTA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ10,SampleAJ10,A059,GTGTTCTA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ11,SampleAJ11,A071,AAGGACAC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ12,SampleAJ12,A083,CAAGGAGC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ13,SampleAJ13,A095,GATGAATC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ14,SampleAJ14,A012,AGTACAAG,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ15,SampleAJ15,A024,AGAGTCAA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ16,SampleAJ16,A036,CCAGTTCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ17,SampleAJ17,A048,GAGCTGAA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ18,SampleAJ18,A060,TAGGATGA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ19,SampleAJ19,A072,AATCCGTC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ20,SampleAJ20,A084,CACCTTAC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ21,SampleAJ21,A096,GCCAAGAC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ22,SampleAJ22,A001,AACGTGAT,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ23,SampleAJ23,A013,AACAACCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ24,SampleAJ24,A025,AGATCGCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ25,SampleAJ25,A037,CCGAAGTA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ26,SampleAJ26,A049,GATAGACA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ27,SampleAJ27,A061,TATCAGCA,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ28,SampleAJ28,A073,AATGTTGC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA
+SampleAJ29,SampleAJ29,A085,CCATCCTC,Experiment1,Description,PhiX\Illumina\RTA\Sequence\WholeGenomeFASTA

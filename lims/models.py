@@ -46,7 +46,7 @@ class Sample(models.Model):
     def __str__(self):
         return "{0}".format(self.sample_id)
 
-class SampleExperiment(models.Model):
+class ExperimentSample(models.Model):
     """
     A listing for a specific sample's usage in a specific experiment
     """
@@ -131,6 +131,26 @@ class Samplesheet(models.Model):
 #         msg = '{0} [{1}]'.format(self.run_id, self.hash[0:6])
 #         return msg
 
+class SamplesheetSample(models.Model):
+    """
+    Samples that are part of a Samplesheet; requires an Experiment
+    """
+    samplesheet = models.ForeignKey('Samplesheet', blank = False, null = False, on_delete = models.CASCADE)
+    sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
+    experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
+    imported = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return "[{0} : {1}] {2}".format(
+            self.experiment.type[:6],
+            self.experiment.experiment_id,
+            self.sample.sample_id)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields = ['experiment','sample', 'samplesheet'], name = 'unique_experiment_id_type_samplesheet'),
+            ]
 #
 # class NGS580Sample(models.Model):
 #     """

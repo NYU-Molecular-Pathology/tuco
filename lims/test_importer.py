@@ -2,7 +2,8 @@ import os
 import sys
 import json
 from django.test import TestCase, override_settings
-from .models import Experiment, Sample, SampleExperiment, Samplesheet
+from .models import Experiment, Sample, ExperimentSample, Samplesheet
+import shutil
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, this_dir)
@@ -57,7 +58,6 @@ class TestImporter(TestCase):
 
     def test_load_experiment_from_jsonfile1(self):
         # {'experiment_id': 'Experiment1', 'type': 'FUSION-SEQer'}
-        experiment_instance, created = importer.import_experiment_from_json(json_file= TEST_EXPERIMENT_JSON1)
+        experiment_instance, created = importer.import_experiment_from_json(json_file = TEST_EXPERIMENT_JSON1)
         self.assertTrue(created)
-        self.assertTrue(experiment_instance.type == 'FUSION-SEQer')
         self.assertTrue(experiment_instance.type == 'FUSION-SEQer')

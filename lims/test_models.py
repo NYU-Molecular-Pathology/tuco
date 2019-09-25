@@ -1,7 +1,9 @@
 import os
 from django.test import TestCase, override_settings
 from django.core.files import File
-from .models import Experiment, Sample, ExperimentSample, Samplesheet, SamplesheetSample
+from .models import Experiment
+from .models import Sample
+from .models import Samplesheet
 from django.conf import settings
 import shutil
 # https://docs.djangoproject.com/en/2.2/topics/testing/tools/
@@ -19,20 +21,13 @@ class TestLIMS(TestCase):
     def setUpTestData(cls):
         # make demo fake db entries
         exp1_instance = Experiment.objects.create(experiment_id = 'Experiment1', type = 'NGS580')
-        instance = Experiment.objects.create(experiment_id = 'Experiment2', type = 'FUSION-SEQer')
-        instance = Experiment.objects.create(experiment_id = 'Experiment3', type = 'NGS580')
-        instance = Experiment.objects.create(experiment_id = 'Experiment4', type = 'NGS629')
-        sample1_instance = Sample.objects.create(sample_id = 'Sample1')
-        ExperimentSample.objects.create(sample = sample1_instance, experiment = exp1_instance)
-        samplesheet_instance = Samplesheet.objects.create(
+        Experiment.objects.create(experiment_id = 'Experiment2', type = 'FUSION-SEQer')
+        Experiment.objects.create(experiment_id = 'Experiment3', type = 'NGS580')
+        Experiment.objects.create(experiment_id = 'Experiment4', type = 'NGS629')
+        Sample.objects.create(sample_id = 'Sample1')
+        Samplesheet.objects.create(
             experiment = exp1_instance,
-            file = File(open(TEST_SAMPLESHEET1),
-            name = TEST_SAMPLESHEET1)
-        )
-        SamplesheetSample.objects.create(
-            experiment = exp1_instance,
-            samplesheet = samplesheet_instance,
-            sample = sample1_instance
+            file = File(open(TEST_SAMPLESHEET1), name = os.path.basename(TEST_SAMPLESHEET1))
         )
 
     @classmethod
@@ -67,32 +62,10 @@ class TestLIMS(TestCase):
         instance = Sample.objects.get(sample_id = 'Sample1')
         self.assertTrue(instance.sample_id == 'Sample1')
 
-    def test_get_sample_experiment1(self):
-        # test that you can get a specific sample_experiment instance out of the database by run_ID
-        sample1_instance = Sample.objects.get(sample_id = 'Sample1')
-        exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
-        sample_experiment_instance = ExperimentSample.objects.get(sample = sample1_instance, experiment = exp1_instance)
-        self.assertTrue(sample_experiment_instance.sample.sample_id == 'Sample1')
-        self.assertTrue(sample_experiment_instance.experiment.experiment_id == 'Experiment1')
-        self.assertTrue(sample_experiment_instance.experiment.type == 'NGS580')
-
     def test_samplesheet1(self):
         # test that an imported samplesheet entry exists
         exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
         samplesheet_instance = Samplesheet.objects.get(experiment = exp1_instance)
         self.assertTrue(samplesheet_instance.experiment.experiment_id == 'Experiment1')
         samplesheet_path = os.path.join(settings.MEDIA_ROOT, samplesheet_instance.file.name)
-        self.assertTrue(samplesheet_path)
-
-    def test_samplesheet_sample1(self):
-        sample1_instance = Sample.objects.get(sample_id = 'Sample1')
-        exp1_instance = Experiment.objects.get(experiment_id = 'Experiment1', type = 'NGS580')
-        samplesheet_instance = Samplesheet.objects.get(experiment = exp1_instance)
-        samplesheet_sample_instance = SamplesheetSample.objects.get(
-            sample = sample1_instance,
-            experiment = exp1_instance,
-            samplesheet = samplesheet_instance
-            )
-        self.assertTrue(samplesheet_sample_instance.sample.sample_id == 'Sample1')
-        self.assertTrue(samplesheet_sample_instance.experiment.experiment_id == 'Experiment1')
-        self.assertTrue(samplesheet_sample_instance.samplesheet.experiment.experiment_id == 'Experiment1')
+        self.assertTrue(os.path.exists(samplesheet_path))

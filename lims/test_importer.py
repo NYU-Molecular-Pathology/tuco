@@ -2,7 +2,9 @@ import os
 import sys
 import json
 from django.test import TestCase, override_settings
-from .models import Experiment, Sample, ExperimentSample, Samplesheet
+from .models import Experiment
+from .models import Sample
+from .models import Samplesheet
 import shutil
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -15,6 +17,7 @@ FIXTURES_DIR = os.path.realpath(os.environ['FIXTURES_DIR'])
 TEST_EXPERIMENTS_DIR = os.path.join(FIXTURES_DIR, 'experiments')
 TEST_EXPERIMENT_JSON1 = os.path.join(TEST_EXPERIMENTS_DIR, 'Experiment1', 'experiment.json')
 TEST_SAMPLESHEET1 = os.path.join(FIXTURES_DIR, 'experiments', 'Experiment1', 'SampleSheet.csv')
+TEST_SAMPLESHEET2 = os.path.join(FIXTURES_DIR, 'experiments', 'Experiment2', 'SampleSheet.csv')
 
 @override_settings(MEDIA_ROOT = MEDIA_ROOT_TEST)
 class TestImporter(TestCase):
@@ -43,22 +46,21 @@ class TestImporter(TestCase):
 
     def test_load_experiment_json1(self):
         json_str = '{"experiment_id":"Foo", "type":"NGS629", "bar":"baz"}'
-        data = importer.parse_experiment_json(json_str)
+        data = json.loads(json_str)
         self.assertTrue(data["experiment_id"] == "Foo")
         self.assertTrue(data["type"] == "NGS629")
-        self.assertTrue(data.get("bar", "no_value") == "no_value")
 
     def test_load_experiment_json2(self):
         # {'experiment_id': 'Experiment1', 'type': 'FUSION-SEQer'}
-        json_str = open(TEST_EXPERIMENT_JSON1).read()
-        data = importer.parse_experiment_json(json_str)
+        with open(TEST_EXPERIMENT_JSON1) as f:
+            data = json.load(f)
         self.assertTrue(data["experiment_id"] == "Experiment1")
         self.assertTrue(data["type"] == "FUSION-SEQer")
         self.assertTrue(data.get("bar", "no_value") == "no_value")
 
     def test_load_experiment_from_jsonfile1(self):
         # {'experiment_id': 'Experiment1', 'type': 'FUSION-SEQer'}
-        experiment_instance, created = importer.import_experiment_from_json(json_file = TEST_EXPERIMENT_JSON1)
+        experiment_instance, created = importer.import_experiment_from_json_file(json_file = TEST_EXPERIMENT_JSON1)
         self.assertTrue(created)
         self.assertTrue(experiment_instance.type == 'FUSION-SEQer')
 
@@ -67,7 +69,7 @@ class TestImporter(TestCase):
         sampleIDs = importer.get_sampleIDs_from_samplesheet(TEST_SAMPLESHEET1)
         self.assertTrue(expected_sample_ids == sampleIDs)
 
-    def test_import_samples_from_samplesheet1(self):
+    def test_get_sampleIDs_import1(self):
         sampleIDs = importer.get_sampleIDs_from_samplesheet(TEST_SAMPLESHEET1)
         for sampleID in sampleIDs:
             sample_instance, created = importer.import_sample(sample_id = sampleID)

@@ -6,7 +6,6 @@ Importation of experiments, runs, samples, etc. for the app database
 import os
 import sys
 import json
-# import django
 # import datetime
 # import csv
 
@@ -15,8 +14,11 @@ import json
 parentdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, parentdir)
 from util import samplesheet # find
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")
-# django.setup()
+# if invoked from command line, need to initialize Django app
+if __name__ == '__main__':
+    import django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tuco.settings")
+    django.setup()
 from lims.models import Experiment, Sample, Samplesheet
 sys.path.pop(0)
 
@@ -30,22 +32,12 @@ def import_experiment(experiment_id, type):
         )
     return(instance, created)
 
-def parse_experiment_json(json_str):
-    """
-    Get selected values from JSON formatted string.
-    """
-    d = json.loads(json_str)
-    data = {}
-    data['experiment_id'] = d.get('experiment_id')
-    data['type'] = d.get('type')
-    return(data)
-
-def import_experiment_from_json(json_file):
+def import_experiment_from_json_file(json_file):
     """
     Import an experiment from a JSON file
     """
     with open(json_file) as f:
-        data = parse_experiment_json(f.read())
+        data = json.load(f)
     instance, created = import_experiment(experiment_id = data.get('experiment_id'), type = data.get('type'))
     return(instance, created)
 
@@ -321,6 +313,7 @@ def import_sample(sample_id):
 
 
 if __name__ == '__main__':
+    print("running importer")
     pass
     # file or directory to import from
     # inputItem = os.path.realpath(sys.argv[1])

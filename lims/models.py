@@ -37,57 +37,78 @@ class Experiment(models.Model):
 
 class Sample(models.Model):
     """
-    A unique physical sample processed by the wet lab
+    A unique physical sample processed by the lab
     """
     sample_id = models.CharField(max_length = 255, verbose_name = 'Sample ID', unique = True, blank = False, null = False)
+    # https://docs.djangoproject.com/en/2.1/ref/models/fields/#django.db.models.ManyToManyField.through
+    experiment = models.ManyToManyField(Experiment, blank = True)
     imported = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return "{0}".format(self.sample_id)
 
-class ExperimentSample(models.Model):
+class Samplesheet(models.Model):
     """
-    A listing for a specific sample's usage in a specific experiment
+    A document that describes the samples in an experiment
     """
-    sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
-    experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
+    experiment = models.OneToOneField(Experiment, on_delete = models.CASCADE)
+    samples = models.ManyToManyField(Sample, blank = True)
+    file = models.FileField() # upload_to = samplesheet_upload_path
     imported = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return "[{0} : {1}] {2}".format(
-            self.experiment.type[:6],
-            self.experiment.experiment_id,
-            self.sample.sample_id)
+        return "[{0}] {1}".format(self.experiment.experiment_id, self.file)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields = ['experiment','sample'], name = 'unique_experiment_id_type'),
-            ]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # SAMPLESHEETS_EXTERNAL_DIR = os.path.realpath(os.environ['SAMPLESHEETS_EXTERNAL_DIR'])
-def samplesheet_upload_path(instance, filename):
-    """
-    user uploaded samplesheet file will be uploaded to MEDIA_ROOT/<experiment_type>/<experiment_id>/<filename>
-    """
-    # p = '{0}/{1}/{2}/{3}'.format(...) datetime.datetime.strftime(now(), '%Y-%m-%d'),
-    p = os.path.join(
-        instance.experiment.type,
-        instance.experiment.experiment_id,
-        os.path.basename(filename)
-    )
-    return(p)
+# def samplesheet_upload_path(instance, filename):
+#     """
+#     user uploaded samplesheet file will be uploaded to MEDIA_ROOT/<experiment_type>/<experiment_id>/<filename>
+#     """
+#     # p = '{0}/{1}/{2}/{3}'.format(...) datetime.datetime.strftime(now(), '%Y-%m-%d'),
+#     p = os.path.join(
+#         instance.experiment.type,
+#         instance.experiment.experiment_id,
+#         os.path.basename(filename)
+#     )
+#     return(p)
 
-class Samplesheet(models.Model):
-    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE)
-    # user uploaded sheet file
-    file = models.FileField(upload_to = samplesheet_upload_path)
-    imported = models.DateTimeField(auto_now_add = True)
-    updated = models.DateTimeField(auto_now = True)
+# class ExperimentSample(models.Model):
+#     """
+#     A listing for a specific sample's usage in a specific experiment
+#     """
+#     sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
+#     experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
+#     imported = models.DateTimeField(auto_now_add = True)
+#     updated = models.DateTimeField(auto_now = True)
+#
+#     def __str__(self):
+#         return "[{0} : {1}] {2}".format(
+#             self.experiment.type[:6],
+#             self.experiment.experiment_id,
+#             self.sample.sample_id)
+#
+#     class Meta:
+#         constraints = [
+#             models.UniqueConstraint(fields = ['experiment','sample'], name = 'unique_experiment_id_type'),
+#             ]
 
-    def __str__(self):
-        return "{0}".format(self.file)
+
     # path to externally imported samplesheet file
     # external_path = models.FilePathField(path = SAMPLESHEETS_EXTERNAL_DIR, blank = True, recursive = True, match = 'SampleSheet.csv')
 #     run_id = models.ForeignKey('Experiment', blank=True, null=True, db_column = 'run_id', on_delete = models.CASCADE)
@@ -95,11 +116,22 @@ class Samplesheet(models.Model):
 #     md5 = models.TextField(blank=True, unique = True) # file identifier
 #     hash = models.TextField(blank = True) # db entry identifier
 #
-#     def save(self, *args, **kwargs):
-#         """
-#         update the 'hash' field with the entry attributes
-#         to ensure a unique, recognizable ID for each entry
-#         """
+    # def save(self, *args, **kwargs):
+    #     """
+    #     update the 'hash' field with the entry attributes
+    #     to ensure a unique, recognizable ID for each entry
+    #     """
+    #     print(self.file)
+    #     print(type(self.file))
+    #     print(dir(self.file))
+    #     # call the parent save method
+    #     super().save(*args, **kwargs)
+    #     print(self.file)
+    #     print(type(self.file))
+    #     print(dir(self.file))
+    # md5 = models.TextField(blank=True, unique = True) # file identifier
+    #     # print(samplesheet_upload_path(self, os.path.basename(self.file)))
+    #
 #         # update the 'type' from the Experiment
 #         type = self.run_id.type
 #         self.type = type
@@ -110,13 +142,13 @@ class Samplesheet(models.Model):
 #         'path': self.path,
 #         'md5' : self.md5
 #         }
-#         try:
-#             # python 2.x
-#             md5 = hashlib.md5( str(''.join(d.values())) ).hexdigest()
-#         except:
-#             # python 3.x
-#             md5 = hashlib.md5( str(''.join(d.values())).encode('utf-8') ).hexdigest()
-#         self.hash = md5
+        # try:
+        #     # python 2.x
+        #     md5 = hashlib.md5( str(''.join(d.values())) ).hexdigest()
+        # except:
+        #     # python 3.x
+        #     md5 = hashlib.md5( str(''.join(d.values())).encode('utf-8') ).hexdigest()
+        # self.hash = md5
 #
 #         # if a path exists but an upload file does not, save the path into the file
 #         if not self.file and self.path:
@@ -124,33 +156,31 @@ class Samplesheet(models.Model):
 #             f = open(self.path, 'rb')
 #             self.file = File(f)
 #
-#         # call the parent save method
-#         super().save(*args, **kwargs)
 #
 #     def __str__(self):
 #         msg = '{0} [{1}]'.format(self.run_id, self.hash[0:6])
 #         return msg
 
-class SamplesheetSample(models.Model):
-    """
-    Samples that are part of a Samplesheet; requires an Experiment
-    """
-    samplesheet = models.ForeignKey('Samplesheet', blank = False, null = False, on_delete = models.CASCADE)
-    sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
-    experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
-    imported = models.DateTimeField(auto_now_add = True)
-    updated = models.DateTimeField(auto_now = True)
-
-    def __str__(self):
-        return "[{0} : {1}] {2}".format(
-            self.experiment.type[:6],
-            self.experiment.experiment_id,
-            self.sample.sample_id)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields = ['experiment','sample', 'samplesheet'], name = 'unique_experiment_id_type_samplesheet'),
-            ]
+# class SamplesheetSample(models.Model):
+#     """
+#     Samples that are part of a Samplesheet; requires an Experiment
+#     """
+#     samplesheet = models.ForeignKey('Samplesheet', blank = False, null = False, on_delete = models.CASCADE)
+#     sample = models.ForeignKey('Sample', blank = False, null = False, on_delete = models.CASCADE)
+#     experiment = models.ForeignKey('Experiment', blank = False, null = False, on_delete = models.CASCADE)
+#     imported = models.DateTimeField(auto_now_add = True)
+#     updated = models.DateTimeField(auto_now = True)
+#
+#     def __str__(self):
+#         return "[{0} : {1}] {2}".format(
+#             self.experiment.type[:6],
+#             self.experiment.experiment_id,
+#             self.sample.sample_id)
+#
+#     class Meta:
+#         constraints = [
+#             models.UniqueConstraint(fields = ['experiment','sample', 'samplesheet'], name = 'unique_experiment_id_type_samplesheet'),
+#             ]
 #
 # class NGS580Sample(models.Model):
 #     """

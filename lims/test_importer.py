@@ -74,3 +74,38 @@ class TestImporter(TestCase):
         for sampleID in sampleIDs:
             sample_instance, created = importer.import_sample(sample_id = sampleID)
             self.assertTrue(created)
+
+    def test_import_sampleIDs_and_experiment(self):
+        experiment_id = "ExperimentFoo"
+        experiment_type = "NGS580"
+        sample_id = "NTC-1-H2O"
+        sample_instance, created = importer.import_sample(sample_id = sample_id)
+        self.assertTrue(created)
+        experiment_instance, created = importer.import_experiment(
+            experiment_id = experiment_id,
+            type = experiment_type)
+        self.assertTrue(created)
+        sample_instance.experiment.add(experiment_instance)
+        all_experiment_ids = [ e.experiment_id for e in sample_instance.experiment.all() ]
+        expected_experiment_ids = [experiment_id]
+        self.assertTrue(all_experiment_ids == expected_experiment_ids)
+
+    def test_import_all_samples_from_samplesheet(self):
+        experiment_id = "ExperimentFoo"
+        experiment_type = "NGS580"
+        expected_sample_ids = [
+            'NC-IVS35', 'Patient1', 'Patient2', 'Patient3', 'NTC-H2O'
+        ]
+        import_results = importer.import_from_samplesheet(
+            iem_file = TEST_SAMPLESHEET2,
+            experiment_id = experiment_id,
+            experiment_type = experiment_type
+            )
+        all_created_sampleIDs = [ s.sample_id for s in import_results[0] ]
+        all_not_created_samples = import_results[1]
+        all_added_experiment = [ s.sample_id for s in import_results[0] ]
+        all_not_added_experiment = import_results[3]
+        self.assertTrue(all_created_sampleIDs == expected_sample_ids)
+        self.assertTrue(all_added_experiment == expected_sample_ids)
+        self.assertTrue(all_not_added_experiment == [])
+        self.assertTrue(all_not_created_samples == [])

@@ -56,6 +56,43 @@ def import_sample(sample_id):
     instance, created = Sample.objects.get_or_create(sample_id = sample_id)
     return(instance, created)
 
+def import_from_samplesheet(iem_file, experiment_id, experiment_type):
+    """
+    Import all the samples in the samplesheet
+    """
+    all_created_samples = []
+    all_not_created_samples = []
+    all_added_experiment = []
+    all_not_added_experiment = []
+    # get the sample IDs from the sheet
+    sampleIDs = get_sampleIDs_from_samplesheet(iem_file = iem_file)
+    experiment_instance, experiment_created = import_experiment(
+        experiment_id = experiment_id, type = experiment_type
+        )
+    # try to create each entry in the database
+    for sampleID in sampleIDs:
+        sample_instance, sample_created = import_sample(sample_id = sampleID)
+        # try to add the experiment to each entry
+        try:
+            sample_instance.experiment.add(experiment_instance)
+            all_added_experiment.append(sample_instance)
+        except:
+            all_not_added_experiment.append(sample_instance)
+        if sample_created:
+            all_created_samples.append(sample_instance)
+        else:
+            all_not_created_samples.append(sample_instance)
+    return((
+    all_created_samples,
+    all_not_created_samples,
+    all_added_experiment,
+    all_not_added_experiment
+    ))
+
+
+
+
+
 # def import_NGS580sample(sample, sample_data, runID, sheet):
 #     """
 #     """
@@ -314,6 +351,7 @@ def import_sample(sample_id):
 
 if __name__ == '__main__':
     print("running importer")
+    print("no actions configured yet...")
     pass
     # file or directory to import from
     # inputItem = os.path.realpath(sys.argv[1])

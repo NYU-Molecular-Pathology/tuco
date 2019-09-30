@@ -103,9 +103,14 @@ class TestImporter(TestCase):
             )
         all_created_sampleIDs = [ s.sample_id for s in import_results[0] ]
         all_not_created_samples = import_results[1]
-        all_added_experiment = [ s.sample_id for s in import_results[0] ]
+        all_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
+        all_added_experiment_ids = []
+        for e in all_added_experiment_querysets:
+            for exp_id in e:
+                all_added_experiment_ids.append(exp_id)
+        all_added_experiment_ids = list(set(all_added_experiment_ids))
         all_not_added_experiment = import_results[3]
         self.assertTrue(all_created_sampleIDs == expected_sample_ids)
-        self.assertTrue(all_added_experiment == expected_sample_ids)
-        self.assertTrue(all_not_added_experiment == [])
         self.assertTrue(all_not_created_samples == [])
+        self.assertTrue(all_added_experiment_ids == [experiment_id])
+        self.assertTrue(all_not_added_experiment == [])

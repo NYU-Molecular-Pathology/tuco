@@ -18,6 +18,7 @@ TEST_EXPERIMENTS_DIR = os.path.join(FIXTURES_DIR, 'experiments')
 TEST_EXPERIMENT_JSON1 = os.path.join(TEST_EXPERIMENTS_DIR, 'Experiment1', 'experiment.json')
 TEST_SAMPLESHEET1 = os.path.join(FIXTURES_DIR, 'experiments', 'Experiment1', 'SampleSheet.csv')
 TEST_SAMPLESHEET2 = os.path.join(FIXTURES_DIR, 'experiments', 'Experiment2', 'SampleSheet.csv')
+TEST_EXPERIMENT_DIR2 = os.path.join(TEST_EXPERIMENTS_DIR, 'Experiment2')
 
 @override_settings(MEDIA_ROOT = MEDIA_ROOT_TEST)
 class TestImporter(TestCase):
@@ -37,7 +38,7 @@ class TestImporter(TestCase):
         self.assertTrue(True)
 
     def test_import_experimentFoo(self):
-        experiment_instance, created = importer.import_experiment(experiment_id = "ExperimentFoo", type = "NGS580")
+        experiment_instance, created = importer.import_experiment(experiment_id = "ExperimentFoo", experiment_type = "NGS580")
         self.assertTrue(created)
         self.assertTrue(experiment_instance.type == 'NGS580')
         self.assertTrue(experiment_instance.experiment_id == 'ExperimentFoo')
@@ -83,7 +84,7 @@ class TestImporter(TestCase):
         self.assertTrue(created)
         experiment_instance, created = importer.import_experiment(
             experiment_id = experiment_id,
-            type = experiment_type)
+            experiment_type = experiment_type)
         self.assertTrue(created)
         sample_instance.experiment.add(experiment_instance)
         all_experiment_ids = [ e.experiment_id for e in sample_instance.experiment.all() ]
@@ -101,16 +102,100 @@ class TestImporter(TestCase):
             experiment_id = experiment_id,
             experiment_type = experiment_type
             )
-        all_created_sampleIDs = [ s.sample_id for s in import_results[0] ]
-        all_not_created_samples = import_results[1]
-        all_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
-        all_added_experiment_ids = []
-        for e in all_added_experiment_querysets:
+        all_imported_sampleIDs = [ s.sample_id for s in import_results[0] ]
+        all_not_imported_samples = import_results[1]
+        all_samples_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
+        all_samples_added_experiment_ids = []
+        for e in all_samples_added_experiment_querysets:
             for exp_id in e:
-                all_added_experiment_ids.append(exp_id)
-        all_added_experiment_ids = list(set(all_added_experiment_ids))
-        all_not_added_experiment = import_results[3]
-        self.assertTrue(all_created_sampleIDs == expected_sample_ids)
-        self.assertTrue(all_not_created_samples == [])
-        self.assertTrue(all_added_experiment_ids == [experiment_id])
-        self.assertTrue(all_not_added_experiment == [])
+                all_samples_added_experiment_ids.append(exp_id)
+        all_samples_added_experiment_ids = list(set(all_samples_added_experiment_ids))
+        all_samples_not_added_experiment = import_results[3]
+        experiment_created = import_results[4]
+        self.assertTrue(all_imported_sampleIDs == expected_sample_ids)
+        self.assertTrue(all_not_imported_samples == [])
+        self.assertTrue(all_samples_added_experiment_ids == [experiment_id])
+        self.assertTrue(all_samples_not_added_experiment == [])
+        self.assertTrue(experiment_created)
+
+    def test_import_all_samples_from_samplesheet_dups(self):
+        """
+        Test that duplicates are not imported from the same samplesheet
+        """
+        experiment_id = "ExperimentFoo"
+        experiment_type = "NGS580"
+        expected_sample_ids = [
+            'NC-IVS35', 'Patient1', 'Patient2', 'Patient3', 'NTC-H2O'
+        ]
+        # first import
+        import_results = importer.import_from_samplesheet(
+            iem_file = TEST_SAMPLESHEET2,
+            experiment_id = experiment_id,
+            experiment_type = experiment_type
+            )
+        all_imported_sampleIDs = [ s.sample_id for s in import_results[0] ]
+        all_not_imported_samples = import_results[1]
+        all_samples_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
+        all_samples_added_experiment_ids = []
+        for e in all_samples_added_experiment_querysets:
+            for exp_id in e:
+                all_samples_added_experiment_ids.append(exp_id)
+        all_samples_added_experiment_ids = list(set(all_samples_added_experiment_ids))
+        all_samples_not_added_experiment = import_results[3]
+        experiment_created = import_results[4]
+        self.assertTrue(all_imported_sampleIDs == expected_sample_ids)
+        self.assertTrue(all_not_imported_samples == [])
+        self.assertTrue(all_samples_added_experiment_ids == [experiment_id])
+        self.assertTrue(all_samples_not_added_experiment == [])
+        self.assertTrue(experiment_created)
+        # second import
+        import_results = importer.import_from_samplesheet(
+            iem_file = TEST_SAMPLESHEET2,
+            experiment_id = experiment_id,
+            experiment_type = experiment_type
+            )
+        all_imported_sampleIDs = [ s.sample_id for s in import_results[0] ]
+        all_not_imported_samples = [ s.sample_id for s in import_results[1] ]
+        all_samples_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
+        all_samples_added_experiment_ids = []
+        for e in all_samples_added_experiment_querysets:
+            for exp_id in e:
+                all_samples_added_experiment_ids.append(exp_id)
+        all_samples_added_experiment_ids = list(set(all_samples_added_experiment_ids))
+        all_samples_not_added_experiment = import_results[3]
+        experiment_created = import_results[4]
+        self.assertTrue(all_imported_sampleIDs == [])
+        self.assertTrue(all_not_imported_samples == expected_sample_ids)
+        self.assertTrue(all_samples_added_experiment_ids == [experiment_id])
+        self.assertTrue(all_samples_not_added_experiment == [])
+        self.assertTrue(experiment_created == False)
+
+    def test_import_from_experiment_dir(self):
+        """
+        Import samples from a samplesheet using the dirname as the experiment_id
+        """
+        expected_experiment_id = "Experiment2"
+        expected_sample_ids = [
+            'NC-IVS35', 'Patient1', 'Patient2', 'Patient3', 'NTC-H2O'
+        ]
+        import_results = importer.import_from_samplesheet(
+            iem_file = TEST_SAMPLESHEET2, 
+            detect_experiment_json = True)
+        all_imported_sampleIDs = [ s.sample_id for s in import_results[0] ]
+        all_not_imported_samples = import_results[1]
+        all_samples_added_experiment_querysets = [ s.experiment.all().values_list('experiment_id', flat = True) for s in import_results[2] ]
+        all_samples_added_experiment_ids = []
+        for e in all_samples_added_experiment_querysets:
+            for exp_id in e:
+                all_samples_added_experiment_ids.append(exp_id)
+        all_samples_added_experiment_ids = list(set(all_samples_added_experiment_ids))
+        all_samples_not_added_experiment = import_results[3]
+        experiment_created = import_results[4]
+        self.assertTrue(all_imported_sampleIDs == expected_sample_ids)
+        self.assertTrue(all_not_imported_samples == [])
+        self.assertTrue(all_samples_added_experiment_ids == [expected_experiment_id])
+        self.assertTrue(all_samples_not_added_experiment == [])
+        self.assertTrue(experiment_created)
+
+
+

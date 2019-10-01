@@ -22,13 +22,13 @@ if __name__ == '__main__':
 from lims.models import Experiment, Sample, Samplesheet
 sys.path.pop(0)
 
-def import_experiment(experiment_id, type):
+def import_experiment(experiment_id, experiment_type):
     """
     Import an experiment to the database
     """
     instance, created = Experiment.objects.get_or_create(
         experiment_id = experiment_id,
-        type =  type,
+        type =  experiment_type,
         )
     return(instance, created)
 
@@ -38,7 +38,7 @@ def import_experiment_from_json_file(json_file):
     """
     with open(json_file) as f:
         data = json.load(f)
-    instance, created = import_experiment(experiment_id = data.get('experiment_id'), type = data.get('type'))
+    instance, created = import_experiment(experiment_id = data.get('experiment_id'), experiment_type = data.get('type'))
     return(instance, created)
 
 def get_sampleIDs_from_samplesheet(iem_file):
@@ -56,18 +56,38 @@ def import_sample(sample_id):
     instance, created = Sample.objects.get_or_create(sample_id = sample_id)
     return(instance, created)
 
-def import_from_samplesheet(iem_file, experiment_id, experiment_type):
+def import_from_samplesheet(iem_file, 
+        experiment_id = False, 
+        experiment_type = None, 
+        detect_experiment_json = False):
     """
     Import all the samples in the samplesheet
     """
-    all_created_samples = []
-    all_not_created_samples = []
-    all_added_experiment = []
-    all_not_added_experiment = []
+    all_imported_samples = []
+    all_not_imported_samples = []
+    all_samples_added_experiment = []
+    all_samples_not_added_experiment = []
     # get the sample IDs from the sheet
     sampleIDs = get_sampleIDs_from_samplesheet(iem_file = iem_file)
+    # try to import the experiment
+    # # try to find a file experiment.json and get experiment configs from that
+    if detect_experiment_json == True:
+        experiment_json_file = os.path.join(os.path.dirname(iem_file), "experiment.json")
+        with open(experiment_json_file) as f:
+            data = json.load(f)
+            experiment_id = data.get('experiment_id')
+            experiment_type = data.get('type')
+    # # check to make sure args are valid
+    if not experiment_id:
+        print("ERROR: experiment_id was not provided or determined")
+        raise # TODO: handle this better
+    if not experiment_type:
+        print("ERROR: experiment_type was not provided or determined")
+        raise # TODO: handle this better
+    # # attempt experiment import
     experiment_instance, experiment_created = import_experiment(
-        experiment_id = experiment_id, type = experiment_type
+        experiment_id = experiment_id, 
+        experiment_type = experiment_type
         )
     # try to create each entry in the database
     for sampleID in sampleIDs:
@@ -75,18 +95,19 @@ def import_from_samplesheet(iem_file, experiment_id, experiment_type):
         # try to add the experiment to each entry
         try:
             sample_instance.experiment.add(experiment_instance)
-            all_added_experiment.append(sample_instance)
+            all_samples_added_experiment.append(sample_instance)
         except:
-            all_not_added_experiment.append(sample_instance)
+            all_samples_not_added_experiment.append(sample_instance)
         if sample_created:
-            all_created_samples.append(sample_instance)
+            all_imported_samples.append(sample_instance)
         else:
-            all_not_created_samples.append(sample_instance)
+            all_not_imported_samples.append(sample_instance)
     return((
-    all_created_samples,
-    all_not_created_samples,
-    all_added_experiment,
-    all_not_added_experiment
+    all_imported_samples,
+    all_not_imported_samples,
+    all_samples_added_experiment,
+    all_samples_not_added_experiment,
+    experiment_created
     ))
 
 

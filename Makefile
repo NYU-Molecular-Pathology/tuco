@@ -101,8 +101,9 @@ $(DB_BACKUP_DIR):
 
 # batch import into the database
 import:
-	python importer/importer.py example-data/runs exps
-	python importer/importer.py example-data/samplesheets NGS580samplesheets
+	python lims/importer.py fixtures/experiments/Experiment1/SampleSheet.csv
+	python lims/importer.py fixtures/experiments/Experiment2/SampleSheet.csv
+	python lims/importer.py fixtures/experiments/Experiment3/SampleSheet.csv
 
 # dump the database for viewing
 dump:

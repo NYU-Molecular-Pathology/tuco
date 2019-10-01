@@ -369,11 +369,19 @@ def import_from_samplesheet(iem_file,
 #     samplesheets = find.find(search_dir = dir, inclusion_patterns = ['SampleSheet.csv'], level_limit = 1)
 #     # import_NGS580samplesheets(samplesheets = samplesheets)
 
+def main():
+    """
+    Main control function for script
+    """
+    import_item = sys.argv[1]
+    import_results = import_from_samplesheet(
+        iem_file = import_item, 
+        detect_experiment_json = True
+        )
+    for item in import_results: print(item)
 
 if __name__ == '__main__':
-    print("running importer")
-    print("no actions configured yet...")
-    pass
+    main()
     # file or directory to import from
     # inputItem = os.path.realpath(sys.argv[1])
     # type of thing to import from that location
